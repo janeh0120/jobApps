@@ -39,11 +39,25 @@ Once you have a schema, you can generate a [Prisma Client](https://www.prisma.io
 ```npx prisma generate```
 The generated client is tailored to your data and can be used in our app to query the database. 
 
+## Note about Prisma schema lists
+Prisma does not support optional list types like `Type[]?`. If you see a validation error, use a non-optional list `Type[]` and make individual item types optional instead (for example `String[]` or `String?[]` where supported).
+
 # 3. Setup API endpoint
 Open the file called `/routes/api.js` and customize it to fit your needs. 
 - Be sure to change the default model name from `items` to whichever model you want to work with. Models are defined in `/prisma/schema.prisma`. 
 - The search endpoint assumes that you have a field called `name`. However, your data might not have such a field. In this case you should pick another field name to use in the search endpoint.
 - The endpoints are setup to limit us to the first 10 results. You may like to tweak this to fit your own vision.
+
+## Submitting new entries
+This app exposes a POST endpoint at `/apps` that accepts JSON matching the Prisma model fields. Example using curl (replace with your real values):
+
+```bash
+curl -X POST http://localhost:3000/apps \
+  -H "Content-Type: application/json" \
+  -d '{"Job_Title":"Product Designer","Company":"Acme","Applied_On":"LinkedIn","process":["email","Design Challenge"],"year":"3rd Year","isRelated":true}'
+```
+
+The front-end form in `public/index.html` now submits to this endpoint and refreshes the list on success.
 
 # 4. Start the app
 

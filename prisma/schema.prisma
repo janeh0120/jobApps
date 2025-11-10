@@ -6,3 +6,18 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+model apps {
+  id                     String   @id @default(auto()) @map("_id") @db.ObjectId
+  Applied_On             String?  @map("Applied On")
+  Company                String
+  Connection_to_Company_ String   @map("Connection to Company?")
+  Design_Related_        Boolean  @map("Design Related?")
+  Job_Title              String   @map("Job Title")
+  Offered                Boolean
+  Process                String[]
+  Referred_              Boolean  @map("Referred?")
+  Status                 String
+  Tailored_App_          Boolean  @map("Tailored App?")
+  Year_                  Int      @map("Year#")
+}

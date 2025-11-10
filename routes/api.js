@@ -4,7 +4,7 @@ import express from 'express'
 const router = express.Router()
 
 // Set this to match the model name in your Prisma schema
-const model = 'items'
+const model = 'apps'
 
 // Prisma lets NodeJS communicate with MongoDB
 // Let's import and initialize the Prisma client
@@ -16,7 +16,7 @@ const prisma = new PrismaClient()
 // ----- basic findMany() -------
 // This endpoint uses the Prisma schema defined in /prisma/schema.prisma
 // This gives us a cleaner data structure to work with. 
-router.get('/data', async (req, res) => {
+router.get('/apps', async (req, res) => {
     try {
         // fetch first 10 records from the database with no filter
         const result = await prisma[model].findMany({
@@ -26,6 +26,43 @@ router.get('/data', async (req, res) => {
     } catch (err) {
         console.log(err)
         res.status(500).send(err)
+    }
+})
+
+
+// ----- create a new app record -------
+router.post('/apps', async (req, res) => {
+    try {
+        const body = req.body || {}
+
+        // map incoming form keys to Prisma model fields
+        const data = {
+            Job_Title: body.Job_Title || body.JobTitle || body.jobTitle || '',
+            Company: body.Company || '',
+            Applied_On: body.Applied_On || body.AppliedOn || body.appliedOn || '',
+            Connection_to_Company_: body.Connection_to_Company_ || body.Connection_To_Company || body.connectionToCompany || '',
+            Design_Related_: body.Design_Related_ ?? body.isRelated ?? false,
+            Offered: body.Offered ?? body.isOffered ?? false,
+            Process: body.Process || body.process || [],
+            Referred_: body.Referred_ ?? body.isReferred ?? false,
+            Status: body.Status || body.status || '',
+            Tailored_App_: body.Tailored_App_ ?? body.isTailored ?? false
+        }
+
+        // Year_ in the schema is an Int; try to parse a numeric prefix from provided year string
+        let parsedYear
+        if (body.Year_ !== undefined) parsedYear = Number(body.Year_)
+        else if (body.year) {
+            const m = String(body.year).match(/\d+/)
+            parsedYear = m ? Number(m[0]) : undefined
+        }
+        if (parsedYear !== undefined && !Number.isNaN(parsedYear)) data.Year_ = parsedYear
+
+        const created = await prisma[model].create({ data })
+        res.status(201).send(created)
+    } catch (err) {
+        console.error(err)
+        res.status(500).send({ error: String(err) })
     }
 })
 
