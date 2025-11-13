@@ -61,3 +61,41 @@ if (form) {
         }
     })
 }
+
+// Modal behavior: open/close
+const modal = document.querySelector('#modal')
+const openBtn = document.querySelector('#openFormBtn')
+const closeTriggers = modal ? modal.querySelectorAll('[data-close]') : []
+
+function openModal() {
+    if (!modal) return
+    modal.classList.add('open')
+    modal.setAttribute('aria-hidden', 'false')
+}
+
+function closeModal() {
+    if (!modal) return
+    modal.classList.remove('open')
+    modal.setAttribute('aria-hidden', 'true')
+}
+
+if (openBtn) openBtn.addEventListener('click', () => openModal())
+closeTriggers.forEach(btn => btn.addEventListener('click', () => closeModal()))
+
+// close on Esc
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal()
+})
+
+// close after successful submit
+if (form) {
+    const origSubmit = form.dispatchEvent
+    // hook into successful form submit by wrapping fetch response handling above — we already call getData() and form.reset(); so close modal there
+    // find the existing submit listener and modify its behavior by adding a MutationObserver or simply add a submit event after the existing listener
+    form.addEventListener('submit', (e) => {
+        // delay close slightly to allow existing handler to run
+        setTimeout(() => {
+            closeModal()
+        }, 200)
+    }, { capture: false })
+}

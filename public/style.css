@@ -1,3 +1,52 @@
 body {
     font-family:Arial, Helvetica, sans-serif;
 }
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+}
+.modal.open { display: block; }
+.modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+}
+.modal-content {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 1.25rem;
+    width: min(720px, 94vw);
+    max-height: 90vh;
+    overflow: auto;
+    border-radius: 8px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+}
+.modal-close {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    border: 0;
+    background: transparent;
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+.open-btn {
+    display:inline-block;
+    margin: .5rem 0;
+    padding: .5rem 1rem;
+}
+
+/* Minimal item card */
+.item {
+    border: 1px solid #eee;
+    padding: .5rem;
+    margin: .5rem 0;
+    border-radius: 4px;
+}

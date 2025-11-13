@@ -38,7 +38,15 @@
   <main>
     <h2>🐈 <span>My Job Applications</span></h2>
     <p>Share your job applications with the community</p>
-    <form id="myForm">
+    <button id="openFormBtn" class="open-btn">Add entry</button>
+
+    <!-- Modal container -->
+    <div id="modal" class="modal" aria-hidden="true">
+      <div class="modal-overlay" data-close></div>
+      <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <button class="modal-close" data-close aria-label="Close form">×</button>
+        <h3 id="modalTitle">Add a Job Application</h3>
+        <form id="myForm">
       <fieldset>
         <label for="jobTitle">Job Title</label>
         <input
@@ -282,10 +290,11 @@
       
       <fieldset>
         <button class="save">Save</button>
-        <button class="reset">Reset</button>
+        <button class="reset" type="reset">Reset</button>
       </fieldset>
-    </form>
-
+        </form>
+      </div>
+    </div>
 
   </main>
 
