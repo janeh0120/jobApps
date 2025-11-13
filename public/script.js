@@ -6,10 +6,41 @@ const getData = async () => {
         // document.querySelector('#content').innerHTML = `<h3>✅ MongoDB connected. </h3>`
         console.log(data)
         data.forEach(item => {
-            let div = document.createElement('div')
-            const title = item.Job_Title || item.JobTitle || item.name || item.Company || 'Untitled'
-            div.textContent = title
-            document.querySelector('#content').appendChild(div)
+            const card = document.createElement('div')
+            card.className = 'item'
+
+            const title = item.Job_Title || item.JobTitle || item.Company || 'Untitled'
+            const company = item.Company || '—'
+            const applied = item.Applied_On || item.AppliedOn || '—'
+            const connection = item.Connection_to_Company_ || item.Connection_To_Company || '—'
+            const design = item.Design_Related_ ? 'Yes' : 'No'
+            const offered = item.Offered ? 'Yes' : 'No'
+            const referred = item.Referred_ ? 'Yes' : 'No'
+            const tailored = item.Tailored_App_ ? 'Yes' : 'No'
+            const status = item.Status || item.status || '—'
+            // Process may be an array or single value
+            const process = Array.isArray(item.Process) ? item.Process.join(', ') : (item.Process || item.process || '—')
+            // Year_ may be Json (number/string/object) depending on your data
+            let year = '—'
+            if (item.Year_ !== undefined && item.Year_ !== null) {
+                if (typeof item.Year_ === 'object') year = JSON.stringify(item.Year_)
+                else year = String(item.Year_)
+            }
+
+            card.innerHTML = `
+                <p><strong>Job Title:</strong> ${escapeHtml(title)}</p>
+                <p><strong>Company:</strong> ${escapeHtml(company)}</p>
+                <p><strong>Applied:</strong> ${escapeHtml(applied)}</p>
+                <p><strong>Connection:</strong> ${escapeHtml(connection)}</p>
+                <p><strong>Design Related:</strong> ${escapeHtml(design)}</p>
+                <p><strong>Offered:</strong> ${escapeHtml(offered)}</p>
+                <p><strong>Referred:</strong> ${escapeHtml(referred)}</p>
+                <p><strong>Tailored App:</strong> ${escapeHtml(tailored)}</p>
+                <p><strong>Status:</strong> ${escapeHtml(status)}</p>
+                <p><strong>Process:</strong> ${escapeHtml(process)}</p>
+                <p><strong>Year:</strong> ${escapeHtml(year)}</p>
+            `
+            document.querySelector('#content').appendChild(card)
         })
     // refresh count when list loads
     getCount()
@@ -118,4 +149,15 @@ if (form) {
             closeModal()
         }, 200)
     }, { capture: false })
+}
+
+// simple HTML escape helper
+function escapeHtml(str) {
+    if (str === undefined || str === null) return ''
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;')
 }
