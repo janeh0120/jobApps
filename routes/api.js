@@ -29,6 +29,18 @@ router.get('/apps', async (req, res) => {
     }
 })
 
+// return total number of entries in the collection
+router.get('/apps/count', async (req, res) => {
+    try {
+        // Prisma count on the model
+        const total = await prisma[model].count()
+        res.send({ count: total })
+    } catch (err) {
+        console.error(err)
+        res.status(500).send({ error: String(err) })
+    }
+})
+
 
 // ----- create a new app record -------
 router.post('/apps', async (req, res) => {

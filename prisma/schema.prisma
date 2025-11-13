@@ -19,5 +19,6 @@ model apps {
   Referred_              Boolean  @map("Referred?")
   Status                 String
   Tailored_App_          Boolean  @map("Tailored App?")
-  Year_                  Int      @map("Year#")
+  /// Multiple data types found: Int: 97.1%, BigInt: 2.9% out of 103 sampled entries
+  Year_                  Json     @map("Year#")
 }

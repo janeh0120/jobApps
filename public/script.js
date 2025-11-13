@@ -3,7 +3,7 @@ const getData = async () => {
     const response = await fetch('/apps')
     if (response.ok) {
         const data = await response.json()
-        document.querySelector('#content').innerHTML = `<h3>✅ MongoDB connected. </h3>`
+        // document.querySelector('#content').innerHTML = `<h3>✅ MongoDB connected. </h3>`
         console.log(data)
         data.forEach(item => {
             let div = document.createElement('div')
@@ -11,6 +11,8 @@ const getData = async () => {
             div.textContent = title
             document.querySelector('#content').appendChild(div)
         })
+    // refresh count when list loads
+    getCount()
     }
     else {
         document.querySelector('#content').innerHTML = `<div>❌ MongoDB is not connected. Please check your connection string in .env file.</div>`
@@ -55,12 +57,30 @@ if (form) {
             // refresh list
             getData()
             form.reset()
+            // refresh count after successful submit
+            getCount()
         } else {
             console.error('Failed to save', await resp.text())
             alert('Failed to save entry')
         }
     })
 }
+
+// fetch and display total count
+async function getCount() {
+    try {
+        const r = await fetch('/apps/count')
+        if (!r.ok) return
+        const j = await r.json()
+        const el = document.querySelector('#countBadge')
+        if (el && typeof j.count === 'number') el.textContent = j.count
+    } catch (err) {
+        console.error('Failed to fetch count', err)
+    }
+}
+
+// initial count load
+getCount()
 
 // Modal behavior: open/close
 const modal = document.querySelector('#modal')
