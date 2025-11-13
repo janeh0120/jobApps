@@ -32,11 +32,12 @@ router.get('/apps', async (req, res) => {
         const limit = Math.min(parseInt(req.query.limit) || 50, 1000)
         const skip = Math.max(parseInt(req.query.skip) || 0, 0)
 
-    const { jobTitle, company, process, design, offered, referred } = req.query
+    const { jobTitle, company, process, design, offered, referred, status } = req.query
 
         const where = {}
         if (jobTitle) where.Job_Title = { contains: jobTitle, mode: 'insensitive' }
         if (company) where.Company = { contains: company, mode: 'insensitive' }
+    if (status) where.Status = { equals: status, mode: 'insensitive' }
     const d = parseBool(design)
     if (d !== undefined) where.Design_Related_ = d
     const o = parseBool(offered)
