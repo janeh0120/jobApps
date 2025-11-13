@@ -32,16 +32,16 @@ const getData = async (params = {}) => {
                 ['One-sided', item.One_Sided_Interview],
                 ['Behavioural', item.Behaviourial_Interview],
                 ['Portfolio', item.Portfolio_Walkthrough],
-                ['Design / Take-home', item.Take_home_Challenge],
+                ['Take-home Challenge', item.Take_home_Challenge],
                 ['Recruiter', item.Recruiter_Call],
                 ['Private', item.Private_Posting_]
             ]
             const process = processFlags.filter(([label, flag]) => !!flag).map(([label]) => label)
-            // Year_ may be Json (number/string/object) depending on your data
+            // Year may be Json (number/string/object) depending on your data
             let year = '—'
-            if (item.Year_ !== undefined && item.Year_ !== null) {
-                if (typeof item.Year_ === 'object') year = JSON.stringify(item.Year_)
-                else year = String(item.Year_)
+            if (item.Year !== undefined && item.Year !== null) {
+                if (typeof item.Year === 'object') year = JSON.stringify(item.Year)
+                else year = String(item.Year)
             }
 
             card.innerHTML = `
@@ -66,6 +66,77 @@ const getData = async (params = {}) => {
         document.querySelector('#content').innerHTML = `<div>❌ MongoDB is not connected. Please check your connection string in .env file.</div>`
     }
 
+}
+
+// Render applications as grid squares with layered images
+const renderGrid = async (params = {}) => {
+    const qs = new URLSearchParams()
+    Object.entries(params).forEach(([k, v]) => {
+        if (v === undefined || v === null || v === '') return
+        qs.append(k, v)
+    })
+    const url = '/apps' + (qs.toString() ? ('?' + qs.toString()) : '')
+    const response = await fetch(url)
+    if (response.ok) {
+        const data = await response.json()
+        const gridContainer = document.querySelector('#gridContainer')
+        gridContainer.innerHTML = ''
+        
+        data.forEach(item => {
+            const square = document.createElement('div')
+            square.className = 'grid-square'
+            square.title = item.Job_Title || 'Untitled'
+            
+            // Build list of image layers (bottom to top)
+            const layers = []
+            
+            // Layer 1: Process type images (multiple possible)
+            if (item.Email_Questions) layers.push('email_questions.png')
+            if (item.One_Sided_Interview) layers.push('one-sided_interview.png')
+            if (item.Behaviourial_Interview) layers.push('behavioural_interview.png')
+            if (item.Portfolio_Walkthrough) layers.push('portfolio_walkthrough.png')
+            if (item.Take_home_Challenge) layers.push('take-home_challenge.png')
+            if (item.Recruiter_Call) layers.push('recruiter_call.png')
+            
+            // Layer 2: Status image (only one)
+            if (item.Status) {
+                const status = String(item.Status).toLowerCase()
+                if (status.includes('rejected')) layers.push('rejected.png')
+                else if (status.includes('accepted')) layers.push('accepted.png')
+                else if (status.includes('no answer') || status.includes('ongoing')) layers.push('no_answer_ongoing.png')
+            }
+            
+            // Layer 3: Design-related
+            if (item.Design_Related_) layers.push('design_related.png')
+            
+            // Layer 4: Referred
+            if (item.Referred_) layers.push('referred.png')
+            
+            // Add tooltip with job title
+            const tooltip = document.createElement('div')
+            tooltip.className = 'grid-square-tooltip'
+            tooltip.textContent = item.Job_Title || 'Untitled'
+            square.appendChild(tooltip)
+            
+            // Add layered images
+            layers.forEach(imageName => {
+                const img = document.createElement('img')
+                img.src = `/assets/images/${imageName}`
+                img.alt = imageName.replace('.png', '').replace(/_/g, ' ')
+                img.onerror = () => {
+                    console.warn(`Failed to load image: ${imageName}`)
+                }
+                square.appendChild(img)
+            })
+            
+            gridContainer.appendChild(square)
+        })
+        
+        getCount()
+    } else {
+        const gridContainer = document.querySelector('#gridContainer')
+        gridContainer.innerHTML = '<div>❌ Failed to load applications</div>'
+    }
 }
 
 getData()
@@ -165,16 +236,16 @@ if (filterForm) {
     filterForm.addEventListener('submit', (e) => {
         e.preventDefault()
         const f = readFilters()
-        document.querySelector('#content').innerHTML = ''
-        getData(f)
+        contentContainer.innerHTML = ''
+        switchView(currentView, f)
     })
 }
 
 if (clearFiltersBtn) {
     clearFiltersBtn.addEventListener('click', () => {
         filterForm.reset()
-        document.querySelector('#content').innerHTML = ''
-        getData()
+        contentContainer.innerHTML = ''
+        switchView(currentView, {})
     })
 }
 
@@ -225,4 +296,40 @@ function escapeHtml(str) {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#039;')
+}
+
+// View toggle between list and grid
+const viewToggleList = document.querySelector('#viewToggleList')
+const viewToggleGrid = document.querySelector('#viewToggleGrid')
+const contentContainer = document.querySelector('#content')
+const gridContainer = document.querySelector('#gridContainer')
+
+let currentParams = {}
+let currentView = 'list'
+
+function switchView(view, params = {}) {
+    currentView = view
+    currentParams = params
+    
+    if (view === 'list') {
+        contentContainer.style.display = 'block'
+        gridContainer.style.display = 'none'
+        viewToggleList.classList.add('active')
+        viewToggleGrid.classList.remove('active')
+        getData(params)
+    } else if (view === 'grid') {
+        contentContainer.style.display = 'none'
+        gridContainer.style.display = 'grid'
+        viewToggleList.classList.remove('active')
+        viewToggleGrid.classList.add('active')
+        renderGrid(params)
+    }
+}
+
+if (viewToggleList) {
+    viewToggleList.addEventListener('click', () => switchView('list', currentParams))
+}
+
+if (viewToggleGrid) {
+    viewToggleGrid.addEventListener('click', () => switchView('grid', currentParams))
 }

@@ -82,3 +82,86 @@ body {
     vertical-align: middle;
     margin-left: 0.5rem;
 }
+
+/* View toggle buttons */
+.view-controls {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+.view-btn {
+    padding: 0.5rem 1rem;
+    border: 2px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+.view-btn:hover {
+    border-color: #007bff;
+}
+.view-btn.active {
+    background: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+/* Grid container */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(10, 24px);
+    gap: 0px;
+    padding: 0.5rem;
+    background: #f9f9f9;
+    border-radius: 4px;
+    width: fit-content;
+}
+
+/* Grid square (24px x 24px) */
+.grid-square {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    overflow: hidden;
+}
+
+.grid-square:hover {
+    border-color: #007bff;
+    z-index: 10;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+}
+
+/* Layered images within grid square */
+.grid-square img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Tooltip on hover */
+.grid-square-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    margin-bottom: 4px;
+    z-index: 20;
+}
+
+.grid-square:hover .grid-square-tooltip {
+    opacity: 1;
+}

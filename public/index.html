@@ -37,6 +37,13 @@
 
   <main>
   <h2><span id="countBadge" class="count-badge">0</span> Times I Hit Apply</h2>
+    
+    <!-- View toggle buttons -->
+    <div class="view-controls">
+      <button id="viewToggleList" class="view-btn active">List View</button>
+      <button id="viewToggleGrid" class="view-btn">Grid View</button>
+    </div>
+    
     <!-- Filters -->
     <form id="filterForm" class="filter-form">
       <input type="text" name="jobTitle" id="filterJobTitle" placeholder="Job title" />
@@ -292,6 +299,11 @@
 
   </main>
 
+  <!-- Grid view container -->
+  <section id="gridContainer" class="grid-container" style="display: none;">
+  </section>
+
+  <!-- List view container -->
   <section id="content">
   </section>
 
