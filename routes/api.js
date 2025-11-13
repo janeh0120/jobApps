@@ -32,18 +32,16 @@ router.get('/apps', async (req, res) => {
         const limit = Math.min(parseInt(req.query.limit) || 50, 1000)
         const skip = Math.max(parseInt(req.query.skip) || 0, 0)
 
-    const { jobTitle, company, process, design, offered, referred, status } = req.query
+    const { jobTitle, company, process, design, referred, status } = req.query
 
         const where = {}
         if (jobTitle) where.Job_Title = { contains: jobTitle, mode: 'insensitive' }
         if (company) where.Company = { contains: company, mode: 'insensitive' }
     if (status) where.Status = { equals: status, mode: 'insensitive' }
     const d = parseBool(design)
-    if (d !== undefined) where.Design_Related_ = d
-    const o = parseBool(offered)
-    if (o !== undefined) where.Offered = o
+    if (d !== undefined) where.Design_Related = d
     const r = parseBool(referred)
-    if (r !== undefined) where.Referred_ = r
+    if (r !== undefined) where.Referred = r
         if (process) {
             // allow comma-separated values, map to boolean process fields (OR semantics)
             const terms = String(process).split(',').map(s => s.trim()).filter(Boolean)
@@ -56,7 +54,7 @@ router.get('/apps', async (req, res) => {
                 else if (lc.includes('portfolio')) or.push({ Portfolio_Walkthrough: true })
                 else if (lc.includes('recruiter')) or.push({ Recruiter_Call: true })
                 else if (lc.includes('design') || lc.includes('take-home') || lc.includes('take home')) or.push({ Take_home_Challenge: true })
-                else if (lc.includes('private')) or.push({ Private_Posting_: true })
+                else if (lc.includes('private')) or.push({ Private_Posting: true })
             }
             if (or.length === 1) Object.assign(where, or[0])
             else if (or.length > 1) where.OR = or
@@ -106,9 +104,8 @@ router.post('/apps', async (req, res) => {
             Job_Title: body.Job_Title || body.JobTitle || body.jobTitle || '',
             Company: body.Company || '',
             Applied_On: body.Applied_On || body.AppliedOn || body.appliedOn || '',
-            Connection_to_Company_: body.Connection_to_Company_ || body.Connection_To_Company || body.connectionToCompany || '',
-            Design_Related_: body.Design_Related_ ?? body.isRelated ?? false,
-            Offered: body.Offered ?? body.isOffered ?? false,
+            Connection_to_Company: body.Connection_to_Company || body.Connection_To_Company || body.connectionToCompany || '',
+            Design_Related: body.Design_Related ?? body.isRelated ?? false,
             // map process selections to boolean fields detected by introspection
             Email_Questions: body.Email_Questions ?? hasProc('email') ?? false,
             One_Sided_Interview: body.One_Sided_Interview !== undefined ? body.One_Sided_Interview : (hasProc('one-sided') || hasProc('one sided')),
@@ -116,20 +113,20 @@ router.post('/apps', async (req, res) => {
             Portfolio_Walkthrough: body.Portfolio_Walkthrough ?? hasProc('portfolio') ?? false,
             Recruiter_Call: body.Recruiter_Call ?? hasProc('recruiter') ?? false,
             Take_home_Challenge: body.Take_home_Challenge !== undefined ? body.Take_home_Challenge : (hasProc('design') || hasProc('take-home') || hasProc('take home')),
-            Private_Posting_: body.Private_Posting_ ?? hasProc('private') ?? false,
-            Referred_: body.Referred_ ?? body.isReferred ?? false,
+            Private_Posting: body.Private_Posting ?? hasProc('private') ?? false,
+            Referred: body.Referred ?? body.isReferred ?? false,
             Status: body.Status || body.status || '',
-            Tailored_App_: body.Tailored_App_ ?? body.isTailored ?? false
+            Tailored_App: body.Tailored_App ?? body.isTailored ?? false
         }
 
-        // Year_ in the schema is an Int; try to parse a numeric prefix from provided year string
+        // Year in the schema is an Int; try to parse a numeric prefix from provided year string
         let parsedYear
-        if (body.Year_ !== undefined) parsedYear = Number(body.Year_)
+        if (body.Year !== undefined) parsedYear = Number(body.Year)
         else if (body.year) {
             const m = String(body.year).match(/\d+/)
             parsedYear = m ? Number(m[0]) : undefined
         }
-        if (parsedYear !== undefined && !Number.isNaN(parsedYear)) data.Year_ = parsedYear
+        if (parsedYear !== undefined && !Number.isNaN(parsedYear)) data.Year = parsedYear
 
         const created = await prisma[model].create({ data })
         res.status(201).send(created)

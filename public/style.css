@@ -83,6 +83,50 @@ body {
     margin-left: 0.5rem;
 }
 
+/* Hover detail card */
+.detail-card {
+    position: fixed;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 1rem;
+    max-width: 350px;
+    max-height: 80vh;
+    overflow-y: auto;
+    z-index: 100;
+}
+
+.detail-close {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    border: none;
+    background: transparent;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.detail-close:hover {
+    color: #007bff;
+}
+
+#detailContent p {
+    margin: 0.5rem 0;
+    word-break: break-word;
+}
+
+#detailContent strong {
+    display: inline-block;
+    min-width: 90px;
+}
+
 /* View toggle buttons */
 .view-controls {
     display: flex;
@@ -116,6 +160,43 @@ body {
     background: #f9f9f9;
     border-radius: 4px;
     width: fit-content;
+}
+
+/* Grid and detail side-by-side layout */
+.grid-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    margin-top: 1rem;
+}
+
+/* Detail panel on the right */
+.detail-panel {
+    flex: 0 0 350px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 1rem;
+    background: #fff;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.detail-panel h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1rem;
+    color: #333;
+}
+
+.detail-panel p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    word-break: break-word;
+}
+
+.detail-panel strong {
+    display: inline-block;
+    min-width: 100px;
+    font-weight: 600;
 }
 
 /* Grid square (24px x 24px) */

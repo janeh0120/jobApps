@@ -38,12 +38,6 @@
   <main>
   <h2><span id="countBadge" class="count-badge">0</span> Times I Hit Apply</h2>
     
-    <!-- View toggle buttons -->
-    <div class="view-controls">
-      <button id="viewToggleList" class="view-btn active">List View</button>
-      <button id="viewToggleGrid" class="view-btn">Grid View</button>
-    </div>
-    
     <!-- Filters -->
     <form id="filterForm" class="filter-form">
       <input type="text" name="jobTitle" id="filterJobTitle" placeholder="Job title" />
@@ -137,18 +131,6 @@
             id="isRelated"
           />
           <span>Design-Related</span>
-        </label>
-      </fieldset>
-
-      <fieldset>
-        <legend>Offered</legend>
-        <label for="Offered">
-          <input
-            type="checkbox"
-            name="isOffered"
-            id="isOffered"
-          />
-          <span>Offered</span>
         </label>
       </fieldset>
 
@@ -297,15 +279,19 @@
       </div>
     </div>
 
+    <!-- Grid and detail layout -->
+    <div class="grid-layout">
+      <!-- Grid view container -->
+      <section id="gridContainer" class="grid-container">
+      </section>
+
+      <!-- Detail panel on the right -->
+      <aside id="detailPanel" class="detail-panel">
+        <h3 id="detailTitle">Hover over a square</h3>
+        <div id="detailContent"></div>
+      </aside>
+    </div>
   </main>
-
-  <!-- Grid view container -->
-  <section id="gridContainer" class="grid-container" style="display: none;">
-  </section>
-
-  <!-- List view container -->
-  <section id="content">
-  </section>
 
   <!-- <footer>
     Created by <a href="https://nsitu.ca">Harold Sikkema</a> in the context of

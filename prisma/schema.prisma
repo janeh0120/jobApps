@@ -10,19 +10,19 @@ datasource db {
 model apps {
   id                     String  @id @default(auto()) @map("_id") @db.ObjectId
   Applied_On             String? @map("Applied On")
-  Behaviourial_Interview Boolean? @map("Behaviourial Interview")
+  Behaviourial_Interview Boolean @map("Behaviourial Interview")
   Company                String
-  Status                 String? @map("Status")
-  Connection_to_Company_ String? @map("Connection to Company?")
-  Design_Related_        Boolean? @map("Design Related?")
-  Email_Questions        Boolean? @map("Email Questions")
+  Connection_to_Company  String? @map("Connection to Company")
+  Design_Related         Boolean @map("Design Related")
+  Email_Questions        Boolean @map("Email Questions")
   Job_Title              String  @map("Job Title")
-  One_Sided_Interview    Boolean? @map("One-Sided Interview")
-  Portfolio_Walkthrough  Boolean? @map("Portfolio Walkthrough")
-  Private_Posting_       Boolean? @map("Private Posting?")
-  Recruiter_Call         Boolean? @map("Recruiter Call")
-  Referred_              Boolean? @map("Referred?")
-  Tailored_App_          Boolean? @map("Tailored App?")
-  Take_home_Challenge    Boolean? @map("Take-home Challenge")
-  Year_                  Int?    @map("Year#")
+  One_Sided_Interview    Boolean @map("One-Sided Interview")
+  Portfolio_Walkthrough  Boolean @map("Portfolio Walkthrough")
+  Private_Posting        Boolean @map("Private Posting")
+  Recruiter_Call         Boolean @map("Recruiter Call")
+  Referred               Boolean
+  Status                 String
+  Tailored_App           Boolean @map("Tailored App")
+  Take_home_Challenge    Boolean @map("Take-home Challenge")
+  Year                   Int
 }

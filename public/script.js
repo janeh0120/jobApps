@@ -1,6 +1,38 @@
-// fetch items from API endpoint and populate the content div
+// Helper to format application details
+function formatApplicationDetails(item) {
+    const title = item.Job_Title || item.JobTitle || item.Company || 'Untitled'
+    const company = item.Company || '—'
+    const applied = item.Applied_On || item.AppliedOn || '—'
+    const connection = item.Connection_to_Company || item.Connection_To_Company || '—'
+    const design = item.Design_Related ? 'Yes' : 'No'
+    const referred = item.Referred ? 'Yes' : 'No'
+    const tailored = item.Tailored_App ? 'Yes' : 'No'
+    const status = item.Status || item.status || '—'
+    
+    const processFlags = [
+        ['Email Questions', item.Email_Questions],
+        ['One-sided', item.One_Sided_Interview],
+        ['Behavioural', item.Behaviourial_Interview],
+        ['Portfolio', item.Portfolio_Walkthrough],
+        ['Take-home Challenge', item.Take_home_Challenge],
+        ['Recruiter', item.Recruiter_Call],
+        ['Private', item.Private_Posting]
+    ]
+    const process = processFlags.filter(([label, flag]) => !!flag).map(([label]) => label)
+    
+    let year = '—'
+    if (item.Year !== undefined && item.Year !== null) {
+        if (typeof item.Year === 'object') year = JSON.stringify(item.Year)
+        else year = String(item.Year)
+    }
+    
+    return {
+        title, company, applied, connection, design, referred, tailored, status, process, year
+    }
+}
+
+// fetch items from API endpoint (no longer rendered as list)
 const getData = async (params = {}) => {
-    // build query string from params
     const qs = new URLSearchParams()
     Object.entries(params).forEach(([k, v]) => {
         if (v === undefined || v === null || v === '') return
@@ -9,63 +41,8 @@ const getData = async (params = {}) => {
     const url = '/apps' + (qs.toString() ? ('?' + qs.toString()) : '')
     const response = await fetch(url)
     if (response.ok) {
-        const data = await response.json()
-        // document.querySelector('#content').innerHTML = `<h3>✅ MongoDB connected. </h3>`
-        console.log(data)
-        data.forEach(item => {
-            const card = document.createElement('div')
-            card.className = 'item'
-
-            const title = item.Job_Title || item.JobTitle || item.Company || 'Untitled'
-            const company = item.Company || '—'
-            const applied = item.Applied_On || item.AppliedOn || '—'
-            const connection = item.Connection_to_Company_ || item.Connection_To_Company || '—'
-            const design = item.Design_Related_ ? 'Yes' : 'No'
-            const offered = item.Offered ? 'Yes' : 'No'
-            const referred = item.Referred_ ? 'Yes' : 'No'
-            const tailored = item.Tailored_App_ ? 'Yes' : 'No'
-            const status = item.Status || item.status || '—'
-            // Process may be an array or single value
-            // derive process badges from boolean schema fields
-            const processFlags = [
-                ['Email Questions', item.Email_Questions],
-                ['One-sided', item.One_Sided_Interview],
-                ['Behavioural', item.Behaviourial_Interview],
-                ['Portfolio', item.Portfolio_Walkthrough],
-                ['Take-home Challenge', item.Take_home_Challenge],
-                ['Recruiter', item.Recruiter_Call],
-                ['Private', item.Private_Posting_]
-            ]
-            const process = processFlags.filter(([label, flag]) => !!flag).map(([label]) => label)
-            // Year may be Json (number/string/object) depending on your data
-            let year = '—'
-            if (item.Year !== undefined && item.Year !== null) {
-                if (typeof item.Year === 'object') year = JSON.stringify(item.Year)
-                else year = String(item.Year)
-            }
-
-            card.innerHTML = `
-                <p><strong>Job Title:</strong> ${escapeHtml(title)}</p>
-                <p><strong>Company:</strong> ${escapeHtml(company)}</p>
-                <p><strong>Applied:</strong> ${escapeHtml(applied)}</p>
-                <p><strong>Connection:</strong> ${escapeHtml(connection)}</p>
-                <p><strong>Design Related:</strong> ${escapeHtml(design)}</p>
-                <p><strong>Offered:</strong> ${escapeHtml(offered)}</p>
-                <p><strong>Referred:</strong> ${escapeHtml(referred)}</p>
-                <p><strong>Tailored App:</strong> ${escapeHtml(tailored)}</p>
-                <p><strong>Status:</strong> ${escapeHtml(status)}</p>
-                <p><strong>Process:</strong> ${process.length ? process.map(escapeHtml).map(s => `<span class="badge">${s}</span>`).join(' ') : '—'}</p>
-                <p><strong>Year:</strong> ${escapeHtml(year)}</p>
-            `
-            document.querySelector('#content').appendChild(card)
-        })
-    // refresh count when list loads
-    getCount()
+        getCount()
     }
-    else {
-        document.querySelector('#content').innerHTML = `<div>❌ MongoDB is not connected. Please check your connection string in .env file.</div>`
-    }
-
 }
 
 // Render applications as grid squares with layered images
@@ -75,6 +52,10 @@ const renderGrid = async (params = {}) => {
         if (v === undefined || v === null || v === '') return
         qs.append(k, v)
     })
+    // Set a very high limit to fetch all records
+    if (!qs.has('limit')) {
+        qs.append('limit', '10000')
+    }
     const url = '/apps' + (qs.toString() ? ('?' + qs.toString()) : '')
     const response = await fetch(url)
     if (response.ok) {
@@ -112,12 +93,6 @@ const renderGrid = async (params = {}) => {
             // Layer 4: Referred
             if (item.Referred_) layers.push('referred.png')
             
-            // Add tooltip with job title
-            const tooltip = document.createElement('div')
-            tooltip.className = 'grid-square-tooltip'
-            tooltip.textContent = item.Job_Title || 'Untitled'
-            square.appendChild(tooltip)
-            
             // Add layered images
             layers.forEach(imageName => {
                 const img = document.createElement('img')
@@ -129,6 +104,26 @@ const renderGrid = async (params = {}) => {
                 square.appendChild(img)
             })
             
+            // Add hover handlers to show detail card
+            square.addEventListener('mouseenter', (e) => {
+                const details = formatApplicationDetails(item)
+                const detailTitle = document.querySelector('#detailTitle')
+                const detailContent = document.querySelector('#detailContent')
+                
+                detailTitle.textContent = details.title
+                detailContent.innerHTML = `
+                    <p><strong>Company:</strong> ${escapeHtml(details.company)}</p>
+                    <p><strong>Applied:</strong> ${escapeHtml(details.applied)}</p>
+                    <p><strong>Connection:</strong> ${escapeHtml(details.connection)}</p>
+                    <p><strong>Design Related:</strong> ${escapeHtml(details.design)}</p>
+                    <p><strong>Referred:</strong> ${escapeHtml(details.referred)}</p>
+                    <p><strong>Tailored App:</strong> ${escapeHtml(details.tailored)}</p>
+                    <p><strong>Status:</strong> ${escapeHtml(details.status)}</p>
+                    <p><strong>Process:</strong> ${details.process.length ? details.process.map(escapeHtml).map(s => `<span class="badge">${s}</span>`).join(' ') : '—'}</p>
+                    <p><strong>Year:</strong> ${escapeHtml(details.year)}</p>
+                `
+            })
+            
             gridContainer.appendChild(square)
         })
         
@@ -138,6 +133,9 @@ const renderGrid = async (params = {}) => {
         gridContainer.innerHTML = '<div>❌ Failed to load applications</div>'
     }
 }
+
+// Initial render grid on page load
+renderGrid()
 
 getData()
 
@@ -161,10 +159,9 @@ if (form) {
         }
 
     // convert checkbox booleans for schema-aligned fields
-    out.Design_Related_ = !!document.querySelector('#isRelated')?.checked
-    out.Offered = !!document.querySelector('#isOffered')?.checked
-    out.Referred_ = !!document.querySelector('#isReferred')?.checked
-    out.Tailored_App_ = !!document.querySelector('#isTailored')?.checked
+    out.Design_Related = !!document.querySelector('#isRelated')?.checked
+    out.Referred = !!document.querySelector('#isReferred')?.checked
+    out.Tailored_App = !!document.querySelector('#isTailored')?.checked
 
     // process boolean fields
     out.Email_Questions = !!document.querySelector('#Email_Questions')?.checked
@@ -181,11 +178,13 @@ if (form) {
             body: JSON.stringify(out)
         })
         if (resp.ok) {
-            // refresh list
-            getData()
+            // refresh grid with all entries
+            renderGrid()
             form.reset()
             // refresh count after successful submit
             getCount()
+            // close modal after successful submit
+            closeModal()
         } else {
             console.error('Failed to save', await resp.text())
             alert('Failed to save entry')
@@ -208,6 +207,32 @@ async function getCount() {
 
 // initial count load
 getCount()
+
+// Auto-refresh system: track count and refresh grid if data changes
+let lastKnownCount = null
+async function autoRefreshCheck() {
+    try {
+        const r = await fetch('/apps/count')
+        if (!r.ok) return
+        const j = await r.json()
+        const currentCount = j.count
+        
+        // If count changed (data added or deleted), refresh grid
+        if (lastKnownCount !== null && lastKnownCount !== currentCount) {
+            console.log(`Data changed: ${lastKnownCount} → ${currentCount}. Refreshing grid...`)
+            const f = readFilters()
+            await renderGrid(f)
+            await getCount()
+        }
+        
+        lastKnownCount = currentCount
+    } catch (err) {
+        console.error('Auto-refresh check failed', err)
+    }
+}
+
+// Start auto-refresh polling every 2 seconds
+setInterval(autoRefreshCheck, 2000)
 
 // Filter form wiring
 const filterForm = document.querySelector('#filterForm')
@@ -236,16 +261,14 @@ if (filterForm) {
     filterForm.addEventListener('submit', (e) => {
         e.preventDefault()
         const f = readFilters()
-        contentContainer.innerHTML = ''
-        switchView(currentView, f)
+        renderGrid(f)
     })
 }
 
 if (clearFiltersBtn) {
     clearFiltersBtn.addEventListener('click', () => {
         filterForm.reset()
-        contentContainer.innerHTML = ''
-        switchView(currentView, {})
+        renderGrid({})
     })
 }
 
@@ -274,19 +297,6 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeModal()
 })
 
-// close after successful submit
-if (form) {
-    const origSubmit = form.dispatchEvent
-    // hook into successful form submit by wrapping fetch response handling above — we already call getData() and form.reset(); so close modal there
-    // find the existing submit listener and modify its behavior by adding a MutationObserver or simply add a submit event after the existing listener
-    form.addEventListener('submit', (e) => {
-        // delay close slightly to allow existing handler to run
-        setTimeout(() => {
-            closeModal()
-        }, 200)
-    }, { capture: false })
-}
-
 // simple HTML escape helper
 function escapeHtml(str) {
     if (str === undefined || str === null) return ''
@@ -296,40 +306,4 @@ function escapeHtml(str) {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#039;')
-}
-
-// View toggle between list and grid
-const viewToggleList = document.querySelector('#viewToggleList')
-const viewToggleGrid = document.querySelector('#viewToggleGrid')
-const contentContainer = document.querySelector('#content')
-const gridContainer = document.querySelector('#gridContainer')
-
-let currentParams = {}
-let currentView = 'list'
-
-function switchView(view, params = {}) {
-    currentView = view
-    currentParams = params
-    
-    if (view === 'list') {
-        contentContainer.style.display = 'block'
-        gridContainer.style.display = 'none'
-        viewToggleList.classList.add('active')
-        viewToggleGrid.classList.remove('active')
-        getData(params)
-    } else if (view === 'grid') {
-        contentContainer.style.display = 'none'
-        gridContainer.style.display = 'grid'
-        viewToggleList.classList.remove('active')
-        viewToggleGrid.classList.add('active')
-        renderGrid(params)
-    }
-}
-
-if (viewToggleList) {
-    viewToggleList.addEventListener('click', () => switchView('list', currentParams))
-}
-
-if (viewToggleGrid) {
-    viewToggleGrid.addEventListener('click', () => switchView('grid', currentParams))
 }
