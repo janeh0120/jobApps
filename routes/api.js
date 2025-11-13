@@ -12,15 +12,60 @@ const model = 'apps'
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
+// helper: parse common truthy/falsy query param values
+function parseBool(v) {
+    if (v === undefined || v === null) return undefined
+    const s = String(v).trim().toLowerCase()
+    if (s === '') return undefined
+    if (['1', 'true', 'yes', 'on'].includes(s)) return true
+    if (['0', 'false', 'no', 'off'].includes(s)) return false
+    return undefined
+}
+
 
 // ----- basic findMany() -------
 // This endpoint uses the Prisma schema defined in /prisma/schema.prisma
 // This gives us a cleaner data structure to work with. 
 router.get('/apps', async (req, res) => {
     try {
-        // fetch first 10 records from the database with no filter
+        // Support basic query params for filtering and pagination
+        const limit = Math.min(parseInt(req.query.limit) || 50, 1000)
+        const skip = Math.max(parseInt(req.query.skip) || 0, 0)
+
+    const { jobTitle, company, process, design, offered, referred } = req.query
+
+        const where = {}
+        if (jobTitle) where.Job_Title = { contains: jobTitle, mode: 'insensitive' }
+        if (company) where.Company = { contains: company, mode: 'insensitive' }
+    const d = parseBool(design)
+    if (d !== undefined) where.Design_Related_ = d
+    const o = parseBool(offered)
+    if (o !== undefined) where.Offered = o
+    const r = parseBool(referred)
+    if (r !== undefined) where.Referred_ = r
+        if (process) {
+            // allow comma-separated values, map to boolean process fields (OR semantics)
+            const terms = String(process).split(',').map(s => s.trim()).filter(Boolean)
+            const or = []
+            for (const t of terms) {
+                const lc = t.toLowerCase()
+                if (lc === 'email' || lc.includes('email')) or.push({ Email_Questions: true })
+                else if (lc.includes('one-sided') || lc.includes('one sided')) or.push({ One_Sided_Interview: true })
+                else if (lc.includes('behaviour') || lc.includes('behavioural')) or.push({ Behaviourial_Interview: true })
+                else if (lc.includes('portfolio')) or.push({ Portfolio_Walkthrough: true })
+                else if (lc.includes('recruiter')) or.push({ Recruiter_Call: true })
+                else if (lc.includes('design') || lc.includes('take-home') || lc.includes('take home')) or.push({ Take_home_Challenge: true })
+                else if (lc.includes('private')) or.push({ Private_Posting_: true })
+            }
+            if (or.length === 1) Object.assign(where, or[0])
+            else if (or.length > 1) where.OR = or
+        }
+
         const result = await prisma[model].findMany({
-            take: 10
+            where,
+            take: limit,
+            skip,
+            orderBy: { Job_Title: 'asc' }
         })
         res.send(result)
     } catch (err) {
@@ -48,6 +93,14 @@ router.post('/apps', async (req, res) => {
         const body = req.body || {}
 
         // map incoming form keys to Prisma model fields
+        // derive process booleans from incoming process array or individual flags
+        const proc = body.Process || body.process || []
+        const hasProc = (term) => {
+            if (!proc) return false
+            if (Array.isArray(proc)) return proc.map(p => String(p).toLowerCase()).some(p => p.includes(term))
+            return String(proc).toLowerCase().includes(term)
+        }
+
         const data = {
             Job_Title: body.Job_Title || body.JobTitle || body.jobTitle || '',
             Company: body.Company || '',
@@ -55,7 +108,14 @@ router.post('/apps', async (req, res) => {
             Connection_to_Company_: body.Connection_to_Company_ || body.Connection_To_Company || body.connectionToCompany || '',
             Design_Related_: body.Design_Related_ ?? body.isRelated ?? false,
             Offered: body.Offered ?? body.isOffered ?? false,
-            Process: body.Process || body.process || [],
+            // map process selections to boolean fields detected by introspection
+            Email_Questions: body.Email_Questions ?? hasProc('email') ?? false,
+            One_Sided_Interview: body.One_Sided_Interview !== undefined ? body.One_Sided_Interview : (hasProc('one-sided') || hasProc('one sided')),
+            Behaviourial_Interview: body.Behaviourial_Interview !== undefined ? body.Behaviourial_Interview : (hasProc('behaviour') || hasProc('behavioural') || hasProc('behavior')),
+            Portfolio_Walkthrough: body.Portfolio_Walkthrough ?? hasProc('portfolio') ?? false,
+            Recruiter_Call: body.Recruiter_Call ?? hasProc('recruiter') ?? false,
+            Take_home_Challenge: body.Take_home_Challenge !== undefined ? body.Take_home_Challenge : (hasProc('design') || hasProc('take-home') || hasProc('take home')),
+            Private_Posting_: body.Private_Posting_ ?? hasProc('private') ?? false,
             Referred_: body.Referred_ ?? body.isReferred ?? false,
             Status: body.Status || body.status || '',
             Tailored_App_: body.Tailored_App_ ?? body.isTailored ?? false

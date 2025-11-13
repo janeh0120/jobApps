@@ -43,12 +43,33 @@ body {
     padding: .5rem 1rem;
 }
 
+.filter-form {
+    display:flex;
+    gap:0.5rem;
+    flex-wrap:wrap;
+    align-items:center;
+    margin-bottom:0.75rem;
+}
+.filter-form input[type="text"], .filter-form select {
+    padding:0.35rem;
+}
+
 /* Minimal item card */
 .item {
     border: 1px solid #eee;
     padding: .5rem;
     margin: .5rem 0;
     border-radius: 4px;
+}
+
+.badge {
+    display:inline-block;
+    background:#eef;
+    color:#003;
+    padding:0.15rem 0.5rem;
+    border-radius:999px;
+    margin-right:0.35rem;
+    font-size:0.85rem;
 }
 
 .count-badge {

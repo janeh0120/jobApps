@@ -8,17 +8,20 @@ datasource db {
 }
 
 model apps {
-  id                     String   @id @default(auto()) @map("_id") @db.ObjectId
-  Applied_On             String?  @map("Applied On")
+  id                     String  @id @default(auto()) @map("_id") @db.ObjectId
+  Applied_On             String? @map("Applied On")
+  Behaviourial_Interview Boolean @map("Behaviourial Interview")
   Company                String
-  Connection_to_Company_ String   @map("Connection to Company?")
-  Design_Related_        Boolean  @map("Design Related?")
-  Job_Title              String   @map("Job Title")
-  Offered                Boolean
-  Process                String[]
-  Referred_              Boolean  @map("Referred?")
-  Status                 String
-  Tailored_App_          Boolean  @map("Tailored App?")
-  /// Multiple data types found: Int: 97.1%, BigInt: 2.9% out of 103 sampled entries
-  Year_                  Json     @map("Year#")
+  Connection_to_Company_ String? @map("Connection to Company?")
+  Design_Related_        Boolean @map("Design Related?")
+  Email_Questions        Boolean @map("Email Questions")
+  Job_Title              String  @map("Job Title")
+  One_Sided_Interview    Boolean @map("One-Sided Interview")
+  Portfolio_Walkthrough  Boolean @map("Portfolio Walkthrough")
+  Private_Posting_       Boolean @map("Private Posting?")
+  Recruiter_Call         Boolean @map("Recruiter Call")
+  Referred_              Boolean @map("Referred?")
+  Tailored_App_          Boolean @map("Tailored App?")
+  Take_home_Challenge    Boolean @map("Take-home Challenge")
+  Year_                  Int     @map("Year#")
 }

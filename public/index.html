@@ -37,6 +37,29 @@
 
   <main>
   <h2><span id="countBadge" class="count-badge">0</span> Times I Hit Apply</h2>
+    <!-- Filters -->
+    <form id="filterForm" class="filter-form">
+      <input type="text" name="jobTitle" id="filterJobTitle" placeholder="Job title" />
+      <input type="text" name="company" id="filterCompany" placeholder="Company" />
+      <select name="status" id="filterStatus">
+        <option value="">Any status</option>
+        <option value="No Answer">No Answer</option>
+        <option value="Rejected">Rejected</option>
+        <option value="Accepted">Accepted</option>
+      </select>
+      <div class="filter-process-group">
+        <label><input type="checkbox" class="filter-process" value="email" /> Email</label>
+        <label><input type="checkbox" class="filter-process" value="one-sided" /> One-sided</label>
+        <label><input type="checkbox" class="filter-process" value="behavioural" /> Behavioural</label>
+        <label><input type="checkbox" class="filter-process" value="portfolio" /> Portfolio</label>
+        <label><input type="checkbox" class="filter-process" value="design" /> Design / Take-home</label>
+        <label><input type="checkbox" class="filter-process" value="recruiter" /> Recruiter</label>
+      </div>
+      <label><input type="checkbox" name="design" id="filterDesign" /> Design related</label>
+      <button type="submit">Apply filters</button>
+      <button type="button" id="clearFilters">Clear</button>
+    </form>
+
     <button id="openFormBtn" class="open-btn">Add Job App</button>
 
     <!-- Modal container -->
@@ -196,92 +219,56 @@
         </label>
       </fieldset>
       
-      <fieldset>
-        <legend>Status</legend>
-        <small>Status</small>
-        <label for="noAnswer">
-          <input
-            type="radio"
-            id="noAnswer"
-            name="status"
-            value="noAnswer"
-          />
-          <span>No Answer</span>
-        </label>
-        <label for="Rejected">
-          <input
-            type="radio"
-            id="Rejected"
-            name="status"
-            value="Rejected"
-          />
-          <span>Rejected</span>
-        </label>
-        <label for="Accepted">
-          <input
-            type="radio"
-            id="Accepted"
-            name="status"
-            value="Accepted"
-          />
-          <span>Accepted</span>
-        </label>
-      </fieldset>
+  <!-- Status removed (not present in current schema) -->
 
       <fieldset>
         <legend>Process</legend>
         <small>Process</small>
-        <label for="process">
+        <label>
           <input
             type="checkbox"
-            id="Email Questions"
-            name="process"
-            value="email"
+            id="Email_Questions"
+            name="Email_Questions"
           />
           <span>Email Questions</span>
         </label>
-        <label for="One-Sided Interview">
+        <label>
           <input
             type="checkbox"
-            id="One-Sided Interview"
-            name="process"
-            value="One-Sided Interview"
+            id="One_Sided_Interview"
+            name="One_Sided_Interview"
           />
           <span>One-Sided Interview</span>
         </label>
-        <label for="Behavioural Interview">
+        <label>
           <input
             type="checkbox"
-            id="Behavioural Interview"
-            name="process"
-            value="Behavioural Interview"
+            id="Behaviourial_Interview"
+            name="Behaviourial_Interview"
           />
           <span>Behavioural Interview</span>
         </label>
-        <label for="Portfolio Walkthrough">
+        <label>
           <input
             type="checkbox"
-            id="Portfolio Walkthrough"
-            name="process"
-            value="Portfolio Walkthrough"
+            id="Portfolio_Walkthrough"
+            name="Portfolio_Walkthrough"
           />
           <span>Portfolio Walkthrough</span>
         </label>
-        <label for="Design Challenge">
+        <label>
           <input
             type="checkbox"
-            id="Design Challenge"
-            name="process"
-            value="Design Challenge"
+            id="Take_home_Challenge"
+            name="Take_home_Challenge"
           />
-          <span>Design Challenge</span>
+          <span>Design / Take-home Challenge</span>
         </label>
-        <label for="Recruiter Call">
+        <label>
           <input
             type="checkbox"
-            id="Recruiter Call"
-            name="process"
-            value="Recruiter Call"
+            id="Recruiter_Call"
+            name="Recruiter_Call"
           />
           <span>Recruiter Call</span>
         </label>

@@ -1,6 +1,13 @@
 // fetch items from API endpoint and populate the content div
-const getData = async () => {
-    const response = await fetch('/apps')
+const getData = async (params = {}) => {
+    // build query string from params
+    const qs = new URLSearchParams()
+    Object.entries(params).forEach(([k, v]) => {
+        if (v === undefined || v === null || v === '') return
+        qs.append(k, v)
+    })
+    const url = '/apps' + (qs.toString() ? ('?' + qs.toString()) : '')
+    const response = await fetch(url)
     if (response.ok) {
         const data = await response.json()
         // document.querySelector('#content').innerHTML = `<h3>✅ MongoDB connected. </h3>`
@@ -19,7 +26,17 @@ const getData = async () => {
             const tailored = item.Tailored_App_ ? 'Yes' : 'No'
             const status = item.Status || item.status || '—'
             // Process may be an array or single value
-            const process = Array.isArray(item.Process) ? item.Process.join(', ') : (item.Process || item.process || '—')
+            // derive process badges from boolean schema fields
+            const processFlags = [
+                ['Email Questions', item.Email_Questions],
+                ['One-sided', item.One_Sided_Interview],
+                ['Behavioural', item.Behaviourial_Interview],
+                ['Portfolio', item.Portfolio_Walkthrough],
+                ['Design / Take-home', item.Take_home_Challenge],
+                ['Recruiter', item.Recruiter_Call],
+                ['Private', item.Private_Posting_]
+            ]
+            const process = processFlags.filter(([label, flag]) => !!flag).map(([label]) => label)
             // Year_ may be Json (number/string/object) depending on your data
             let year = '—'
             if (item.Year_ !== undefined && item.Year_ !== null) {
@@ -37,7 +54,7 @@ const getData = async () => {
                 <p><strong>Referred:</strong> ${escapeHtml(referred)}</p>
                 <p><strong>Tailored App:</strong> ${escapeHtml(tailored)}</p>
                 <p><strong>Status:</strong> ${escapeHtml(status)}</p>
-                <p><strong>Process:</strong> ${escapeHtml(process)}</p>
+                <p><strong>Process:</strong> ${process.length ? process.map(escapeHtml).map(s => `<span class="badge">${s}</span>`).join(' ') : '—'}</p>
                 <p><strong>Year:</strong> ${escapeHtml(year)}</p>
             `
             document.querySelector('#content').appendChild(card)
@@ -72,11 +89,19 @@ if (form) {
             }
         }
 
-        // convert checkbox booleans
-        out.Design_Related_ = !!document.querySelector('#isRelated')?.checked
-        out.Offered = !!document.querySelector('#isOffered')?.checked
-        out.Referred_ = !!document.querySelector('#isReferred')?.checked
-        out.Tailored_App_ = !!document.querySelector('#isTailored')?.checked
+    // convert checkbox booleans for schema-aligned fields
+    out.Design_Related_ = !!document.querySelector('#isRelated')?.checked
+    out.Offered = !!document.querySelector('#isOffered')?.checked
+    out.Referred_ = !!document.querySelector('#isReferred')?.checked
+    out.Tailored_App_ = !!document.querySelector('#isTailored')?.checked
+
+    // process boolean fields
+    out.Email_Questions = !!document.querySelector('#Email_Questions')?.checked
+    out.One_Sided_Interview = !!document.querySelector('#One_Sided_Interview')?.checked
+    out.Behaviourial_Interview = !!document.querySelector('#Behaviourial_Interview')?.checked
+    out.Portfolio_Walkthrough = !!document.querySelector('#Portfolio_Walkthrough')?.checked
+    out.Take_home_Challenge = !!document.querySelector('#Take_home_Challenge')?.checked
+    out.Recruiter_Call = !!document.querySelector('#Recruiter_Call')?.checked
 
         // send payload to server
         const resp = await fetch('/apps', {
@@ -112,6 +137,46 @@ async function getCount() {
 
 // initial count load
 getCount()
+
+// Filter form wiring
+const filterForm = document.querySelector('#filterForm')
+const clearFiltersBtn = document.querySelector('#clearFilters')
+
+function readFilters() {
+    const form = new FormData(filterForm)
+    const out = {}
+    for (const [k, v] of form.entries()) {
+        if (v === '') continue
+        if (k === 'design') out.design = true
+        else out[k] = v
+    }
+    // design unchecked -> undefined (no filter)
+    if (!document.querySelector('#filterDesign').checked) delete out.design
+    // gather process checkboxes selected in the filter bar
+    const procBoxes = document.querySelectorAll('.filter-process:checked')
+    if (procBoxes.length > 0) {
+        const vals = Array.from(procBoxes).map(b => b.value)
+        out.process = vals.join(',')
+    }
+    return out
+}
+
+if (filterForm) {
+    filterForm.addEventListener('submit', (e) => {
+        e.preventDefault()
+        const f = readFilters()
+        document.querySelector('#content').innerHTML = ''
+        getData(f)
+    })
+}
+
+if (clearFiltersBtn) {
+    clearFiltersBtn.addEventListener('click', () => {
+        filterForm.reset()
+        document.querySelector('#content').innerHTML = ''
+        getData()
+    })
+}
 
 // Modal behavior: open/close
 const modal = document.querySelector('#modal')
