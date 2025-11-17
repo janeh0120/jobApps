@@ -88,10 +88,10 @@ const renderGrid = async (params = {}) => {
             }
             
             // Layer 3: Design-related
-            if (item.Design_Related_) layers.push('design_related.png')
+            if (item.Design_Related) layers.push('design_related.png')
             
             // Layer 4: Referred
-            if (item.Referred_) layers.push('referred.png')
+            if (item.Referred) layers.push('referred.png')
             
             // Add layered images
             layers.forEach(imageName => {
@@ -244,10 +244,14 @@ function readFilters() {
     for (const [k, v] of form.entries()) {
         if (v === '') continue
         if (k === 'design') out.design = true
+        else if (k === 'referred') out.referred = true
+        else if (k === 'tailored') out.tailored = true
         else out[k] = v
     }
-    // design unchecked -> undefined (no filter)
+    // unchecked checkboxes -> undefined (no filter)
     if (!document.querySelector('#filterDesign').checked) delete out.design
+    if (!document.querySelector('#filterReferred').checked) delete out.referred
+    if (!document.querySelector('#filterTailored').checked) delete out.tailored
     // gather process checkboxes selected in the filter bar
     const procBoxes = document.querySelectorAll('.filter-process:checked')
     if (procBoxes.length > 0) {

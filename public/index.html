@@ -42,11 +42,20 @@
     <form id="filterForm" class="filter-form">
       <input type="text" name="jobTitle" id="filterJobTitle" placeholder="Job title" />
       <input type="text" name="company" id="filterCompany" placeholder="Company" />
+      <input type="text" name="connectionToCompany" id="filterConnection" placeholder="Connection to company" />
       <select name="status" id="filterStatus">
         <option value="">Any status</option>
         <option value="No Answer">No Answer</option>
         <option value="Rejected">Rejected</option>
         <option value="Accepted">Accepted</option>
+      </select>
+      <select name="year" id="filterYear">
+        <option value="">Any year</option>
+        <option value="1">1st Year</option>
+        <option value="2">2nd Year</option>
+        <option value="3">3rd Year</option>
+        <option value="4">4th Year</option>
+        <option value="5">5th Year</option>
       </select>
       <div class="filter-process-group">
         <label><input type="checkbox" class="filter-process" value="email" /> Email</label>
@@ -55,8 +64,11 @@
         <label><input type="checkbox" class="filter-process" value="portfolio" /> Portfolio</label>
         <label><input type="checkbox" class="filter-process" value="design" /> Design / Take-home</label>
         <label><input type="checkbox" class="filter-process" value="recruiter" /> Recruiter</label>
+        <label><input type="checkbox" class="filter-process" value="private" /> Private Posting</label>
       </div>
       <label><input type="checkbox" name="design" id="filterDesign" /> Design related</label>
+      <label><input type="checkbox" name="referred" id="filterReferred" /> Referred</label>
+      <label><input type="checkbox" name="tailored" id="filterTailored" /> Tailored App</label>
       <button type="submit">Apply filters</button>
       <button type="button" id="clearFilters">Clear</button>
     </form>

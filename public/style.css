@@ -61,7 +61,7 @@ main {
 
 /* Minimal item card */
 .item {
-    border: 1px solid #eee;
+    /* border: 1px solid #eee; */
     padding: .5rem;
     margin: .5rem 0;
     border-radius: 4px;
@@ -161,10 +161,10 @@ main {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     gap: 0px;
-    padding: 0.5rem;
+    /* padding: 0.5rem; */
     background: #f9f9f9;
-    border-radius: 4px;
-    width: 50vw;
+    /* border-radius: 4px; */
+    width: 40vw;
     flex: 0 0 50%;
     overflow-y: auto;
     max-height: 80vh;
@@ -214,8 +214,8 @@ main {
     width: 5vw;
     height: 5vw;
     aspect-ratio: 1 / 1;
-    background: #f0f0f0;
-    border: 1px solid #ddd;
+    /* background: #f0f0f0; */
+    /* border: 1px solid #ddd; */
     overflow: hidden;
 }
 
@@ -243,8 +243,8 @@ main {
     transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.8);
     color: #fff;
-    padding: 0.25rem 0.5rem;
-    border-radius: 3px;
+    /* padding: 0.25rem 0.5rem; */
+    /* border-radius: 3px; */
     font-size: 0.75rem;
     white-space: nowrap;
     pointer-events: none;

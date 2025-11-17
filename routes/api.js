@@ -32,16 +32,20 @@ router.get('/apps', async (req, res) => {
         const limit = Math.min(parseInt(req.query.limit) || 50, 1000)
         const skip = Math.max(parseInt(req.query.skip) || 0, 0)
 
-    const { jobTitle, company, process, design, referred, status } = req.query
+    const { jobTitle, company, connectionToCompany, process, design, referred, tailored, status, year } = req.query
 
         const where = {}
         if (jobTitle) where.Job_Title = { contains: jobTitle, mode: 'insensitive' }
         if (company) where.Company = { contains: company, mode: 'insensitive' }
+        if (connectionToCompany) where.Connection_to_Company = { contains: connectionToCompany, mode: 'insensitive' }
     if (status) where.Status = { equals: status, mode: 'insensitive' }
+    if (year) where.Year = parseInt(year)
     const d = parseBool(design)
     if (d !== undefined) where.Design_Related = d
     const r = parseBool(referred)
     if (r !== undefined) where.Referred = r
+    const t = parseBool(tailored)
+    if (t !== undefined) where.Tailored_App = t
         if (process) {
             // allow comma-separated values, map to boolean process fields (AND semantics)
             const terms = String(process).split(',').map(s => s.trim()).filter(Boolean)
