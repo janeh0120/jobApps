@@ -96,7 +96,15 @@ const renderGrid = async (params = {}) => {
             // Build list of image layers (bottom to top)
             const layers = []
             
-            // Layer 1: Process type images (multiple possible)
+            // Layer 1 (BACK): Base/foundation images - Year
+            if (item.Year !== undefined && item.Year !== null) {
+                const year = parseInt(item.Year)
+                if (year >= 1 && year <= 5) {
+                    layers.push(`Year${year}.png`)
+                }
+            }
+            
+            // Layer 2: Process type images (multiple possible)
             if (item.Email_Questions) layers.push('email_questions.png')
             if (item.One_Sided_Interview) layers.push('one-sided_interview.png')
             if (item.Behaviourial_Interview) layers.push('behavioural_interview.png')
@@ -104,7 +112,10 @@ const renderGrid = async (params = {}) => {
             if (item.Take_home_Challenge) layers.push('take-home_challenge.png')
             if (item.Recruiter_Call) layers.push('recruiter_call.png')
             
-            // Layer 2: Status image (only one)
+            // Layer 3: Private Posting
+            if (item.Private_Posting) layers.push('private_posting.png')
+            
+            // Layer 4: Status image (only one)
             if (item.Status) {
                 const status = String(item.Status).toLowerCase()
                 if (status.includes('rejected')) layers.push('rejected.png')
@@ -112,11 +123,14 @@ const renderGrid = async (params = {}) => {
                 else if (status.includes('no answer') || status.includes('ongoing')) layers.push('no_answer_ongoing.png')
             }
             
-            // Layer 3: Design-related
-            if (item.Design_Related) layers.push('design_related.png')
+            // Layer 5: Design-related
+            if (item.Design_Related) layers.push('design-related.png')
             
-            // Layer 4: Referred
+            // Layer 6: Referred
             if (item.Referred) layers.push('referred.png')
+            
+            // Layer 7 (TOP): Tailored App
+            if (item.Tailored_App) layers.push('tailored_app.png')
             
             // Add layered images
             layers.forEach(imageName => {
