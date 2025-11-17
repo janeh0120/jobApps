@@ -11,8 +11,58 @@ main {
 h2{
     text-transform: uppercase;
 }
-/* Ensure all text uses regular font weight */
-strong, b {
+/* Ensure all text uses regular fon/* Grid and detail side-by-side layout */
+.grid-layout {
+    display: flex;
+    gap: 0;
+    align-items: flex-start;
+    margin-top: 1rem;
+    width: 100%;
+    position: relative;
+}
+
+/* Detail tooltip popup */
+.detail-tooltip {
+    position: fixed;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-width: 350px;
+    max-height: 80vh;
+    overflow-y: auto;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.detail-tooltip h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1rem;
+    color: #333;
+}
+
+.detail-tooltip p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    word-break: break-word;
+}
+
+.detail-tooltip strong {
+    display: inline-block;
+    min-width: 100px;
+    font-weight: 400;
+}
+
+.detail-panel {
+    flex: 0 0 50%;
+    /* border: 1px solid #ddd; */
+    border-radius: 0;
+    padding: 1rem;
+    background: #fff;
+    max-height: 80vh;
+    overflow-y: auto;
+} b {
     font-weight: 400;
 }
 

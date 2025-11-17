@@ -133,6 +133,7 @@ const renderGrid = async (params = {}) => {
             // Add hover handlers to show detail card
             square.addEventListener('mouseenter', (e) => {
                 const details = formatApplicationDetails(item)
+                const tooltip = document.querySelector('#detailTooltip')
                 const detailTitle = document.querySelector('#detailTitle')
                 const detailContent = document.querySelector('#detailContent')
                 
@@ -148,6 +149,17 @@ const renderGrid = async (params = {}) => {
                     <p><strong>Process:</strong> ${details.process.length ? details.process.map(escapeHtml).map(s => `<span class="badge">${s}</span>`).join(' ') : '—'}</p>
                     <p><strong>Year:</strong> ${escapeHtml(details.year)}</p>
                 `
+                
+                // Position tooltip near the square
+                const rect = square.getBoundingClientRect()
+                tooltip.style.left = (rect.right + 10) + 'px'
+                tooltip.style.top = rect.top + 'px'
+                tooltip.style.display = 'block'
+            })
+            
+            square.addEventListener('mouseleave', (e) => {
+                const tooltip = document.querySelector('#detailTooltip')
+                tooltip.style.display = 'none'
             })
             
             gridContainer.appendChild(square)
