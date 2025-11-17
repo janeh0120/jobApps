@@ -252,8 +252,8 @@ function readFilters() {
     if (!document.querySelector('#filterDesign').checked) delete out.design
     if (!document.querySelector('#filterReferred').checked) delete out.referred
     if (!document.querySelector('#filterTailored').checked) delete out.tailored
-    // gather process checkboxes selected in the filter bar
-    const procBoxes = document.querySelectorAll('.filter-process:checked')
+    // gather process checkboxes selected in the filter bar (exclude the separate private posting)
+    const procBoxes = document.querySelectorAll('.filter-process:checked:not(#filterPrivate)')
     if (procBoxes.length > 0) {
         const vals = Array.from(procBoxes).map(b => b.value)
         out.process = vals.join(',')

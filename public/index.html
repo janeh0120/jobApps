@@ -57,18 +57,24 @@
         <option value="4">4th Year</option>
         <option value="5">5th Year</option>
       </select>
-      <div class="filter-process-group">
-        <label><input type="checkbox" class="filter-process" value="email" /> Email</label>
-        <label><input type="checkbox" class="filter-process" value="one-sided" /> One-sided</label>
-        <label><input type="checkbox" class="filter-process" value="behavioural" /> Behavioural</label>
-        <label><input type="checkbox" class="filter-process" value="portfolio" /> Portfolio</label>
-        <label><input type="checkbox" class="filter-process" value="design" /> Design / Take-home</label>
-        <label><input type="checkbox" class="filter-process" value="recruiter" /> Recruiter</label>
-        <label><input type="checkbox" class="filter-process" value="private" /> Private Posting</label>
-      </div>
+      
+      <fieldset class="filter-fieldset">
+        <legend>Application Process</legend>
+        <div class="filter-process-group">
+          <label><input type="checkbox" class="filter-process" value="email" /> Email</label>
+          <label><input type="checkbox" class="filter-process" value="one-sided" /> One-sided</label>
+          <label><input type="checkbox" class="filter-process" value="behavioural" /> Behavioural</label>
+          <label><input type="checkbox" class="filter-process" value="portfolio" /> Portfolio</label>
+          <label><input type="checkbox" class="filter-process" value="design" /> Design / Take-home</label>
+          <label><input type="checkbox" class="filter-process" value="recruiter" /> Recruiter</label>
+        </div>
+      </fieldset>
+      
       <label><input type="checkbox" name="design" id="filterDesign" /> Design related</label>
       <label><input type="checkbox" name="referred" id="filterReferred" /> Referred</label>
       <label><input type="checkbox" name="tailored" id="filterTailored" /> Tailored App</label>
+      <label><input type="checkbox" class="filter-process" id="filterPrivate" value="private" /> Private Posting</label>
+      
       <button type="submit">Apply filters</button>
       <button type="button" id="clearFilters">Clear</button>
     </form>
