@@ -43,21 +43,21 @@ router.get('/apps', async (req, res) => {
     const r = parseBool(referred)
     if (r !== undefined) where.Referred = r
         if (process) {
-            // allow comma-separated values, map to boolean process fields (OR semantics)
+            // allow comma-separated values, map to boolean process fields (AND semantics)
             const terms = String(process).split(',').map(s => s.trim()).filter(Boolean)
-            const or = []
+            const and = []
             for (const t of terms) {
                 const lc = t.toLowerCase()
-                if (lc === 'email' || lc.includes('email')) or.push({ Email_Questions: true })
-                else if (lc.includes('one-sided') || lc.includes('one sided')) or.push({ One_Sided_Interview: true })
-                else if (lc.includes('behaviour') || lc.includes('behavioural')) or.push({ Behaviourial_Interview: true })
-                else if (lc.includes('portfolio')) or.push({ Portfolio_Walkthrough: true })
-                else if (lc.includes('recruiter')) or.push({ Recruiter_Call: true })
-                else if (lc.includes('design') || lc.includes('take-home') || lc.includes('take home')) or.push({ Take_home_Challenge: true })
-                else if (lc.includes('private')) or.push({ Private_Posting: true })
+                if (lc === 'email' || lc.includes('email')) and.push({ Email_Questions: true })
+                else if (lc.includes('one-sided') || lc.includes('one sided')) and.push({ One_Sided_Interview: true })
+                else if (lc.includes('behaviour') || lc.includes('behavioural')) and.push({ Behaviourial_Interview: true })
+                else if (lc.includes('portfolio')) and.push({ Portfolio_Walkthrough: true })
+                else if (lc.includes('recruiter')) and.push({ Recruiter_Call: true })
+                else if (lc.includes('design') || lc.includes('take-home') || lc.includes('take home')) and.push({ Take_home_Challenge: true })
+                else if (lc.includes('private')) and.push({ Private_Posting: true })
             }
-            if (or.length === 1) Object.assign(where, or[0])
-            else if (or.length > 1) where.OR = or
+            if (and.length === 1) Object.assign(where, and[0])
+            else if (and.length > 1) where.AND = and
         }
 
         const result = await prisma[model].findMany({
