@@ -47,25 +47,51 @@ const getData = async (params = {}) => {
 
 // Render applications as grid squares with layered images
 const renderGrid = async (params = {}) => {
+    // Always fetch ALL records, then filter on client-side
     const qs = new URLSearchParams()
-    Object.entries(params).forEach(([k, v]) => {
-        if (v === undefined || v === null || v === '') return
-        qs.append(k, v)
-    })
-    // Set a very high limit to fetch all records
-    if (!qs.has('limit')) {
-        qs.append('limit', '10000')
-    }
-    const url = '/apps' + (qs.toString() ? ('?' + qs.toString()) : '')
+    qs.append('limit', '10000')
+    const url = '/apps?' + qs.toString()
     const response = await fetch(url)
     if (response.ok) {
-        const data = await response.json()
+        const allData = await response.json()
         const gridContainer = document.querySelector('#gridContainer')
         gridContainer.innerHTML = ''
         
-        data.forEach(item => {
+        // Helper function to check if an entry matches the filters
+        const matchesFilters = (item, filters) => {
+            if (Object.keys(filters).length === 0) return true // No filters applied
+            
+            if (filters.jobTitle && !item.Job_Title?.toLowerCase().includes(filters.jobTitle.toLowerCase())) return false
+            if (filters.company && !item.Company?.toLowerCase().includes(filters.company.toLowerCase())) return false
+            if (filters.connectionToCompany && !item.Connection_to_Company?.toLowerCase().includes(filters.connectionToCompany.toLowerCase())) return false
+            if (filters.status && item.Status?.toLowerCase() !== filters.status.toLowerCase()) return false
+            if (filters.year && item.Year !== parseInt(filters.year)) return false
+            if (filters.design === 'true' && !item.Design_Related) return false
+            if (filters.referred === 'true' && !item.Referred) return false
+            if (filters.tailored === 'true' && !item.Tailored_App) return false
+            
+            // Check process filters (AND logic)
+            if (filters.process) {
+                const processTags = filters.process.split(',').map(t => t.trim().toLowerCase())
+                for (const tag of processTags) {
+                    if (tag === 'email' && !item.Email_Questions) return false
+                    if (tag === 'one-sided' && !item.One_Sided_Interview) return false
+                    if (tag === 'behavioural' && !item.Behaviourial_Interview) return false
+                    if (tag === 'portfolio' && !item.Portfolio_Walkthrough) return false
+                    if (tag === 'recruiter' && !item.Recruiter_Call) return false
+                    if (tag === 'design' && !item.Take_home_Challenge) return false
+                    if (tag === 'private' && !item.Private_Posting) return false
+                }
+            }
+            
+            return true
+        }
+        
+        allData.forEach(item => {
+            const isMatch = matchesFilters(item, params)
             const square = document.createElement('div')
             square.className = 'grid-square'
+            if (!isMatch) square.classList.add('grid-square--faded')
             square.title = item.Job_Title || 'Untitled'
             
             // Build list of image layers (bottom to top)
