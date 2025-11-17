@@ -92,7 +92,6 @@ const renderGrid = async (params = {}) => {
             const square = document.createElement('div')
             square.className = 'grid-square'
             if (!isMatch) square.classList.add('grid-square--faded')
-            square.title = item.Job_Title || 'Untitled'
             
             // Build list of image layers (bottom to top)
             const layers = []
@@ -150,11 +149,33 @@ const renderGrid = async (params = {}) => {
                     <p><strong>Year:</strong> ${escapeHtml(details.year)}</p>
                 `
                 
-                // Position tooltip near the square
+                // Position tooltip near the square with boundary checks
                 const rect = square.getBoundingClientRect()
-                tooltip.style.left = (rect.right + 10) + 'px'
-                tooltip.style.top = rect.top + 'px'
-                tooltip.style.display = 'block'
+                tooltip.style.display = 'block' // Display first to get dimensions
+                
+                const tooltipRect = tooltip.getBoundingClientRect()
+                const tooltipWidth = tooltipRect.width
+                const tooltipHeight = tooltipRect.height
+                const viewportWidth = window.innerWidth
+                const viewportHeight = window.innerHeight
+                const padding = 10
+                
+                // Calculate horizontal position (right of square by default)
+                let left = rect.right + padding
+                // If tooltip would overflow right edge, position it to the left of square instead
+                if (left + tooltipWidth > viewportWidth) {
+                    left = rect.left - tooltipWidth - padding
+                }
+                
+                // Calculate vertical position (align with top by default)
+                let top = rect.top
+                // If tooltip would overflow bottom edge, position it above the square instead
+                if (top + tooltipHeight > viewportHeight) {
+                    top = Math.max(0, viewportHeight - tooltipHeight - padding)
+                }
+                
+                tooltip.style.left = left + 'px'
+                tooltip.style.top = top + 'px'
             })
             
             square.addEventListener('mouseleave', (e) => {
