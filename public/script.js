@@ -57,6 +57,9 @@ const renderGrid = async (params = {}) => {
         const gridContainer = document.querySelector('#gridContainer')
         gridContainer.innerHTML = ''
         
+        // Check if any filters are actually active
+        const hasActiveFilters = Object.keys(params).length > 0
+        
         // Helper function to check if an entry matches the filters
         const matchesFilters = (item, filters) => {
             if (Object.keys(filters).length === 0) return true // No filters applied
@@ -89,68 +92,93 @@ const renderGrid = async (params = {}) => {
         
         allData.forEach(item => {
             const isMatch = matchesFilters(item, params)
+            const shouldFade = hasActiveFilters && !isMatch
             const square = document.createElement('div')
             square.className = 'grid-square'
-            if (!isMatch) square.classList.add('grid-square--faded')
+            if (shouldFade) square.classList.add('grid-square--faded')
             
-            // Build list of image layers (bottom to top)
+            // Build list of image layers with metadata about what they represent
             const layers = []
             
             // Layer 1 (BACK): Offered status image - foundation
             if (item.Status) {
                 const status = String(item.Status).toLowerCase()
-                if (status.includes('offered')) layers.push('offered.png')
+                if (status.includes('offered')) layers.push({ name: 'offered.png', relatedFilters: ['status'] })
             }
             
             // Layer 2: Process type images (multiple possible)
-            if (item.Email_Questions) layers.push('email_questions.png')
-            if (item.One_Sided_Interview) layers.push('one-sided_interview.png')
-            if (item.Behaviourial_Interview) layers.push('behavioural_interview.png')
-            if (item.Portfolio_Walkthrough) layers.push('portfolio_walkthrough.png')
-            if (item.Take_home_Challenge) layers.push('take-home_challenge.png')
-            if (item.Recruiter_Call) layers.push('recruiter_call.png')
+            if (item.Email_Questions) layers.push({ name: 'email_questions.png', relatedFilters: ['process'] })
+            if (item.One_Sided_Interview) layers.push({ name: 'one-sided_interview.png', relatedFilters: ['process'] })
+            if (item.Behaviourial_Interview) layers.push({ name: 'behavioural_interview.png', relatedFilters: ['process'] })
+            if (item.Portfolio_Walkthrough) layers.push({ name: 'portfolio_walkthrough.png', relatedFilters: ['process'] })
+            if (item.Take_home_Challenge) layers.push({ name: 'take-home_challenge.png', relatedFilters: ['process'] })
+            if (item.Recruiter_Call) layers.push({ name: 'recruiter_call.png', relatedFilters: ['process'] })
             
             // Layer 3: Private Posting
-            if (item.Private_Posting) layers.push('private_posting.png')
+            if (item.Private_Posting) layers.push({ name: 'private_posting.png', relatedFilters: ['process'] })
             
             // Layer 4: Other status images (no answer, ongoing)
             if (item.Status) {
                 const status = String(item.Status).toLowerCase()
-                if (status.includes('no answer') || status.includes('ongoing')) layers.push('no_answer_ongoing.png')
+                if (status.includes('no answer') || status.includes('ongoing')) layers.push({ name: 'no_answer_ongoing.png', relatedFilters: ['status'] })
             }
             
             // Layer 5: Design-related
-            if (item.Design_Related) layers.push('design-related.png')
+            if (item.Design_Related) layers.push({ name: 'design-related.png', relatedFilters: ['design'] })
             
             // Layer 6: Referred
-            if (item.Referred) layers.push('referred.png')
+            if (item.Referred) layers.push({ name: 'referred.png', relatedFilters: ['referred'] })
             
             // Layer 7: Tailored App
-            if (item.Tailored_App) layers.push('tailored_app.png')
+            if (item.Tailored_App) layers.push({ name: 'tailored_app.png', relatedFilters: ['tailored'] })
             
             // Layer 8 (NEAR TOP): Year images - on top of most things
             if (item.Year !== undefined && item.Year !== null) {
                 const year = parseInt(item.Year)
                 if (year >= 1 && year <= 5) {
-                    layers.push(`Year${year}.png`)
+                    layers.push({ name: `Year${year}.png`, relatedFilters: ['year'] })
                 }
             }
             
             // Layer 9 (VERY TOP/FRONT): Accepted and Rejected status images - on top of everything
             if (item.Status) {
                 const status = String(item.Status).toLowerCase()
-                if (status.includes('accepted')) layers.push('accepted.png')
-                else if (status.includes('rejected')) layers.push('rejected.png')
+                if (status.includes('accepted')) layers.push({ name: 'accepted.png', relatedFilters: ['status'] })
+                else if (status.includes('rejected')) layers.push({ name: 'rejected.png', relatedFilters: ['status'] })
+            }
+            
+            // Helper: check if an image is related to any active filters
+            const imageIsRelevant = (layer) => {
+                if (!hasActiveFilters) return true // No filters = all relevant
+                
+                // Check if this layer's related filters match any active filter
+                if (params.design && layer.relatedFilters.includes('design')) return true
+                if (params.referred && layer.relatedFilters.includes('referred')) return true
+                if (params.tailored && layer.relatedFilters.includes('tailored')) return true
+                if (params.status && layer.relatedFilters.includes('status')) return true
+                if (params.year && layer.relatedFilters.includes('year')) return true
+                if (params.process && layer.relatedFilters.includes('process')) return true
+                if (params.jobTitle && layer.relatedFilters.includes('jobTitle')) return true
+                if (params.company && layer.relatedFilters.includes('company')) return true
+                if (params.connectionToCompany && layer.relatedFilters.includes('connectionToCompany')) return true
+                
+                return false
             }
             
             // Add layered images
-            layers.forEach(imageName => {
+            layers.forEach(layer => {
                 const img = document.createElement('img')
-                img.src = `/assets/images/${imageName}`
-                img.alt = imageName.replace('.png', '').replace(/_/g, ' ')
+                img.src = `/assets/images/${layer.name}`
+                img.alt = layer.name.replace('.png', '').replace(/_/g, ' ')
                 img.onerror = () => {
-                    console.warn(`Failed to load image: ${imageName}`)
+                    console.warn(`Failed to load image: ${layer.name}`)
                 }
+                
+                // Apply opacity to images that don't match active filters
+                if (isMatch && hasActiveFilters && !imageIsRelevant(layer)) {
+                    img.style.opacity = '0.5'
+                }
+                
                 square.appendChild(img)
             })
             
