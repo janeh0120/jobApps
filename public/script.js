@@ -96,7 +96,15 @@ const renderGrid = async (params = {}) => {
             // Build list of image layers (bottom to top)
             const layers = []
             
-            // Layer 1 (BACK): Base/foundation images - Year
+            // Layer 1 (VERY BACK): Accepted, Offered, and Rejected status images - foundation
+            if (item.Status) {
+                const status = String(item.Status).toLowerCase()
+                if (status.includes('accepted')) layers.push('accepted.png')
+                else if (status.includes('offered')) layers.push('offered.png')
+                else if (status.includes('rejected')) layers.push('rejected.png')
+            }
+            
+            // Layer 2: Year images (base/foundation)
             if (item.Year !== undefined && item.Year !== null) {
                 const year = parseInt(item.Year)
                 if (year >= 1 && year <= 5) {
@@ -104,7 +112,7 @@ const renderGrid = async (params = {}) => {
                 }
             }
             
-            // Layer 2: Process type images (multiple possible)
+            // Layer 3: Process type images (multiple possible)
             if (item.Email_Questions) layers.push('email_questions.png')
             if (item.One_Sided_Interview) layers.push('one-sided_interview.png')
             if (item.Behaviourial_Interview) layers.push('behavioural_interview.png')
@@ -112,24 +120,22 @@ const renderGrid = async (params = {}) => {
             if (item.Take_home_Challenge) layers.push('take-home_challenge.png')
             if (item.Recruiter_Call) layers.push('recruiter_call.png')
             
-            // Layer 3: Private Posting
+            // Layer 4: Private Posting
             if (item.Private_Posting) layers.push('private_posting.png')
             
-            // Layer 4: Status image (only one)
+            // Layer 5: Other status images (no answer, ongoing)
             if (item.Status) {
                 const status = String(item.Status).toLowerCase()
-                if (status.includes('rejected')) layers.push('rejected.png')
-                else if (status.includes('accepted')) layers.push('accepted.png')
-                else if (status.includes('no answer') || status.includes('ongoing')) layers.push('no_answer_ongoing.png')
+                if (status.includes('no answer') || status.includes('ongoing')) layers.push('no_answer_ongoing.png')
             }
             
-            // Layer 5: Design-related
+            // Layer 6: Design-related
             if (item.Design_Related) layers.push('design-related.png')
             
-            // Layer 6: Referred
+            // Layer 7: Referred
             if (item.Referred) layers.push('referred.png')
             
-            // Layer 7 (TOP): Tailored App
+            // Layer 8 (TOP): Tailored App
             if (item.Tailored_App) layers.push('tailored_app.png')
             
             // Add layered images
