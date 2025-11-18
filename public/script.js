@@ -66,9 +66,9 @@ const renderGrid = async (params = {}) => {
             if (filters.connectionToCompany && !item.Connection_to_Company?.toLowerCase().includes(filters.connectionToCompany.toLowerCase())) return false
             if (filters.status && item.Status?.toLowerCase() !== filters.status.toLowerCase()) return false
             if (filters.year && item.Year !== parseInt(filters.year)) return false
-            if (filters.design === 'true' && !item.Design_Related) return false
-            if (filters.referred === 'true' && !item.Referred) return false
-            if (filters.tailored === 'true' && !item.Tailored_App) return false
+            if (filters.design && !item.Design_Related) return false
+            if (filters.referred && !item.Referred) return false
+            if (filters.tailored && !item.Tailored_App) return false
             
             // Check process filters (AND logic)
             if (filters.process) {
@@ -336,8 +336,8 @@ function readFilters() {
     if (!document.querySelector('#filterDesign').checked) delete out.design
     if (!document.querySelector('#filterReferred').checked) delete out.referred
     if (!document.querySelector('#filterTailored').checked) delete out.tailored
-    // gather process checkboxes selected in the filter bar (exclude the separate private posting)
-    const procBoxes = document.querySelectorAll('.filter-process:checked:not(#filterPrivate)')
+    // gather all process checkboxes selected in the filter bar (including private posting)
+    const procBoxes = document.querySelectorAll('.filter-process:checked')
     if (procBoxes.length > 0) {
         const vals = Array.from(procBoxes).map(b => b.value)
         out.process = vals.join(',')
