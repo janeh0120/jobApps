@@ -96,23 +96,13 @@ const renderGrid = async (params = {}) => {
             // Build list of image layers (bottom to top)
             const layers = []
             
-            // Layer 1 (VERY BACK): Accepted, Offered, and Rejected status images - foundation
+            // Layer 1 (BACK): Offered status image - foundation
             if (item.Status) {
                 const status = String(item.Status).toLowerCase()
-                if (status.includes('accepted')) layers.push('accepted.png')
-                else if (status.includes('offered')) layers.push('offered.png')
-                else if (status.includes('rejected')) layers.push('rejected.png')
+                if (status.includes('offered')) layers.push('offered.png')
             }
             
-            // Layer 2: Year images (base/foundation)
-            if (item.Year !== undefined && item.Year !== null) {
-                const year = parseInt(item.Year)
-                if (year >= 1 && year <= 5) {
-                    layers.push(`Year${year}.png`)
-                }
-            }
-            
-            // Layer 3: Process type images (multiple possible)
+            // Layer 2: Process type images (multiple possible)
             if (item.Email_Questions) layers.push('email_questions.png')
             if (item.One_Sided_Interview) layers.push('one-sided_interview.png')
             if (item.Behaviourial_Interview) layers.push('behavioural_interview.png')
@@ -120,23 +110,38 @@ const renderGrid = async (params = {}) => {
             if (item.Take_home_Challenge) layers.push('take-home_challenge.png')
             if (item.Recruiter_Call) layers.push('recruiter_call.png')
             
-            // Layer 4: Private Posting
+            // Layer 3: Private Posting
             if (item.Private_Posting) layers.push('private_posting.png')
             
-            // Layer 5: Other status images (no answer, ongoing)
+            // Layer 4: Other status images (no answer, ongoing)
             if (item.Status) {
                 const status = String(item.Status).toLowerCase()
                 if (status.includes('no answer') || status.includes('ongoing')) layers.push('no_answer_ongoing.png')
             }
             
-            // Layer 6: Design-related
+            // Layer 5: Design-related
             if (item.Design_Related) layers.push('design-related.png')
             
-            // Layer 7: Referred
+            // Layer 6: Referred
             if (item.Referred) layers.push('referred.png')
             
-            // Layer 8 (TOP): Tailored App
+            // Layer 7: Tailored App
             if (item.Tailored_App) layers.push('tailored_app.png')
+            
+            // Layer 8 (NEAR TOP): Year images - on top of most things
+            if (item.Year !== undefined && item.Year !== null) {
+                const year = parseInt(item.Year)
+                if (year >= 1 && year <= 5) {
+                    layers.push(`Year${year}.png`)
+                }
+            }
+            
+            // Layer 9 (VERY TOP/FRONT): Accepted and Rejected status images - on top of everything
+            if (item.Status) {
+                const status = String(item.Status).toLowerCase()
+                if (status.includes('accepted')) layers.push('accepted.png')
+                else if (status.includes('rejected')) layers.push('rejected.png')
+            }
             
             // Add layered images
             layers.forEach(imageName => {
