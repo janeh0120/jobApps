@@ -47,10 +47,10 @@
       <div class="modal-overlay" data-close></div>
       <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <button class="modal-close" data-close aria-label="Close form">×</button>
-        <h3 id="modalTitle">Add a Job Application</h3>
+        <h2 id="modalTitle">Add a Job Application</h2>
         <form id="myForm">
-      <fieldset>
-        <label for="jobTitle">Job Title</label>
+      
+        <label for="jobTitle">Job Title*</label>
         <input
           required
           type="text"
@@ -59,11 +59,9 @@
           placeholder="e.g. Product Design Intern"
           autocomplete="off"
         />
-        <small class="validation">Job Title is required</small>
-      </fieldset>
-
-      <fieldset>
-        <label for="company">Company</label>
+        <!-- <small class="validation">Job Title is required</small> -->
+      
+        <label for="company">Company*</label>
         <input
           required
           type="text"
@@ -72,26 +70,22 @@
           placeholder="e.g. Acme Corp"
           autocomplete="off"
         />
-        <small class="validation">Company is required</small>
-      </fieldset>
-
-      <fieldset>
+        <!-- <small class="validation">Company is required</small> -->
+      
         <label for="company">Applied Using</label>
         <input
-          required
+          
           type="text"
           name="Applied_On"
           id="appliedOn"
           placeholder="e.g. LinkedIn"
           autocomplete="off"
         />
-        <small class="validation">Applied using is required</small>
-      </fieldset>
-
-      <fieldset>
+        <!-- <small class="validation">Applied using is required</small> -->
+      
         <label for="company">Connection to Company</label>
         <input
-          required
+          
           type="text"
           name="Connection_To_Company"
           id="connectionToCompany"
@@ -99,10 +93,10 @@
           autocomplete="off"
         />
         <!-- <small class="validation">Connection to Company is required</small> -->
-      </fieldset>
+    
 
       <fieldset>
-        <legend>Design Related</legend>
+        <legend>Other Filters</legend>
         <label for="Design_Related_">
           <input
             type="checkbox"
@@ -111,10 +105,7 @@
           />
           <span>Design-Related</span>
         </label>
-      </fieldset>
-
-      <fieldset>
-        <legend>Referred</legend>
+   
         <label for="Referred">
           <input
             type="checkbox"
@@ -123,10 +114,7 @@
           />
           <span>Referred</span>
         </label>
-      </fieldset>
-
-      <fieldset>
-        <legend>Tailored Application</legend>
+      
         <label for="Tailored Application">
           <input
             type="checkbox"
@@ -137,69 +125,32 @@
         </label>
       </fieldset>
 
-      <fieldset>
-        <legend>Year</legend>
-        <small>Year</small>
-        <label for="1st Year">
-          <input
-            type="radio"
-            id="1st Year"
-            name="year"
-            value="1st Year"
-          />
-          <span>1st Year</span>
-        </label>
-        <label for="2nd Year">
-          <input
-            type="radio"
-            id="2nd Year"
-            name="year"
-            value="2nd Year"
-          />
-          <span>2nd Year</span>
-        </label>
-        <label for="3rd Year">
-          <input
-            type="radio"
-            id="3rd Year"
-            name="year"
-            value="3rd Year"
-          />
-          <span>3rd Year</span>
-        </label>
-        <label for="4th Year">
-          <input
-            type="radio"
-            id="4th Year"
-            name="year"
-            value="4th Year"
-          />
-          <span>4th Year</span>
-        </label>
-        <label for="5th Year">
-          <input
-            type="radio"
-            id="5th Year"
-            name="year"
-            value="5th Year"
-          />
-          <span>5th Year</span>
-        </label>
-      </fieldset>
-      
-      <fieldset>
-        <legend>Status</legend>
-        <select name="Status" id="status">
-          <option value="">Select status</option>
-          <option value="No Answer">No Answer</option>
-          <option value="Rejected">Rejected</option>
-          <option value="Accepted">Accepted</option>
-        </select>
-      </fieldset>
+      <div class="year-status-row">
+<div class="status-section">
+          <legend>Status</legend>
+          <select name="status" id="status">
+            <option value="">Select status</option>
+            <option value="No Answer/Ongoing">No Answer/Ongoing</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Accepted">Accepted</option>
+          </select>
+        </div>
+
+        <div class="year-section">
+          <legend>Year Applied</legend>
+          <select name="yearApplication" id="yearApplication">
+            <option value="">Select year</option>
+            <option value="1st Year">1st Year</option>
+            <option value="2nd Year">2nd Year</option>
+            <option value="3rd Year">3rd Year</option>
+            <option value="4th Year">4th Year</option>
+            <option value="5th Year">5th Year</option>
+          </select>
+        </div>
+      </div>
 
       <fieldset>
         <legend>Process</legend>
-        <small>Process</small>
         <label>
           <input
             type="checkbox"
@@ -250,10 +201,12 @@
         </label>
       </fieldset>
       
-      <fieldset>
-        <button class="save">Save</button>
-        <button class="reset" type="reset">Reset</button>
-      </fieldset>
+      
+        <div class="button-group">
+          <button class="save" type="submit">Save</button>
+          <button class="reset" type="reset">Reset</button>
+        </div>
+     
         </form>
       </div>
     </div>

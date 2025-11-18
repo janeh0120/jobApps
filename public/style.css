@@ -24,6 +24,10 @@ h1{
     font-weight: 600;
 }
 
+h2{
+    text-transform: uppercase;
+}
+
 p{
     font-size: smaller;
 }
@@ -56,7 +60,7 @@ p{
     padding: 1rem;
     flex: 1;
     min-height: 0;
-    overflow: hidden;
+    overflow-y: auto;
 }
 
 /* Grid wrapper containing grid and tooltip */
@@ -67,6 +71,7 @@ p{
     height: 100%;
     width: auto;
     display: flex;
+    overflow-y: auto;
     /* max-width: 50%; */
 }
 
@@ -75,7 +80,7 @@ p{
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     gap: 0px;
-    background: #f9f9f9;
+    background: #e3e3e3;
     min-width: 0;
     overflow: auto;
     grid-auto-rows: 1fr;
@@ -91,8 +96,8 @@ p{
     background: #fff;
     /* border: 1px solid #ddd; */
     /* border-radius: 6px; */
-    max-height: 80vh;
-    overflow-y: auto;
+    /* max-height: 80vh; */
+    /* overflow-y: auto; */
 }
 
 /* Detail tooltip popup */
@@ -150,7 +155,7 @@ p{
     transform: translate(-50%, -50%);
     background: #fff;
     padding: 1.25rem;
-    width: min(720px, 94vw);
+    width: min(720px, 90vw);
     max-height: 90vh;
     overflow: auto;
     border-radius: 8px;
@@ -428,3 +433,156 @@ button[type="openFormBtn"]:hover {
     color: #fff;
     border: 1px solid #fff;
 }
+
+/* Unified input and select styling for modal and filters */
+#myForm input[type="text"],
+#myForm input[type="number"],
+#myForm select,
+.filter-form input[type="text"],
+.filter-form select {
+    padding: 0.35rem;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 400;
+    box-sizing: border-box;
+}
+
+#myForm input[type="text"]:focus,
+#myForm input[type="number"]:focus,
+#myForm select:focus,
+.filter-form input[type="text"]:focus,
+.filter-form select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+/* Unified button styling for modal and filters */
+#myForm button,
+.filter-form button,
+.buttons-container button,
+.modal-close {
+    padding: 0.5rem 1rem;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #333;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#myForm button:hover,
+.filter-form button:hover,
+.buttons-container button:hover,
+.modal-close:hover {
+    background-color: #f5f5f5;
+    border-color: #000;
+}
+
+#myForm button:active,
+.filter-form button:active,
+.buttons-container button:active {
+    background-color: #e9e9e9;
+}
+
+/* Modal form specific styling */
+#myForm {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+#myForm label {
+    font-weight: 400;
+    font-size: 0.9rem;
+    color: #333;
+    margin-bottom: 0.25rem;
+}
+
+#myForm fieldset {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: flex-start;
+}
+
+#myForm fieldset legend {
+    padding: 0 0.5rem;
+    font-weight: 400;
+    font-size: 0.95rem;
+    color: #333;
+    width: 100%;
+    margin: 0 0 0.35rem 0;
+}
+
+#myForm fieldset label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+#myForm fieldset input[type="checkbox"] {
+    cursor: pointer;
+}
+
+/* Year and Status horizontally stacked */
+#myForm .year-status-row {
+    display: flex;
+    gap: 1rem;
+    margin: 0.5rem 0;
+}
+
+#myForm .year-section,
+#myForm .status-section {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+#myForm .year-section legend,
+#myForm .status-section legend {
+    font-weight: 400;
+    font-size: 0.9rem;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+#myForm .year-section select,
+#myForm .status-section select {
+    padding: 0.35rem;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 400;
+    box-sizing: border-box;
+}
+
+#myForm .button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+#myForm .button-group button {
+    flex: 1 1 auto;
+    width: 100%;
+}
+
