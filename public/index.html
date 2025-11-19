@@ -243,44 +243,80 @@
           <div class="filter-row">
             <div class="filter-group">
               <label for="filterStatus">Application Status</label>
-              <select name="status" id="filterStatus">
-                <option value="">Any status</option>
-                <option value="No Answer">No Answer</option>
-                <option value="Rejected">Rejected</option>
-                <option value="Accepted">Accepted</option>
-              </select>
+              <div class="custom-select-wrapper">
+                <button type="button" class="custom-select-button" id="statusButton">
+                  <span>Any status</span>
+                </button>
+                <div class="custom-select-menu" id="statusMenu">
+                  <div class="custom-option" data-value="">Any status</div>
+                  <div class="custom-option" data-value="No Answer/Ongoing">
+                    <img src="/assets/images/no_answer_ongoing.png" alt="No Answer/Ongoing" class="option-icon" />
+                    No Answer/Ongoing
+                  </div>
+                  <div class="custom-option" data-value="Rejected">
+                    <img src="/assets/images/rejected.png" alt="Rejected" class="option-icon" />
+                    Rejected
+                  </div>
+                  <div class="custom-option" data-value="Accepted">
+                    <img src="/assets/images/accepted.png" alt="Accepted" class="option-icon" />
+                    Accepted
+                  </div>
+                </div>
+                <input type="hidden" name="status" id="filterStatus" value="">
+              </div>
             </div>
             <div class="filter-group">
               <label for="filterYear">Year Applied</label>
-              <select name="year" id="filterYear">
-                <option value="">Any year</option>
-                <option value="1">1st Year</option>
-                <option value="2">2nd Year</option>
-                <option value="3">3rd Year</option>
-                <option value="4">4th Year</option>
-                <option value="5">5th Year</option>
-              </select>
+              <div class="custom-select-wrapper">
+                <button type="button" class="custom-select-button" id="yearButton">
+                  <span>Any year</span>
+                </button>
+                <div class="custom-select-menu" id="yearMenu">
+                  <div class="custom-option" data-value="">Any year</div>
+                  <div class="custom-option" data-value="1">
+                    <img src="/assets/images/Year1.png" alt="1st Year" class="option-icon" />
+                    1st Year
+                  </div>
+                  <div class="custom-option" data-value="2">
+                    <img src="/assets/images/Year2.png" alt="2nd Year" class="option-icon" />
+                    2nd Year
+                  </div>
+                  <div class="custom-option" data-value="3">
+                    <img src="/assets/images/Year3.png" alt="3rd Year" class="option-icon" />
+                    3rd Year
+                  </div>
+                  <div class="custom-option" data-value="4">
+                    <img src="/assets/images/Year4.png" alt="4th Year" class="option-icon" />
+                    4th Year
+                  </div>
+                  <div class="custom-option" data-value="5">
+                    <img src="/assets/images/Year5.png" alt="5th Year" class="option-icon" />
+                    5th Year
+                  </div>
+                </div>
+                <input type="hidden" name="year" id="filterYear" value="">
+              </div>
             </div>
           </div>
           
           <fieldset class="filter-fieldset">
             <legend>Application Process</legend>
             <div class="filter-process-group">
-              <label><input type="checkbox" class="filter-process" value="email" /> Email Questions</label>
-              <label><input type="checkbox" class="filter-process" value="one-sided" /> One-sided Interview</label>
-              <label><input type="checkbox" class="filter-process" value="behavioural" /> Behavioural Interview</label>
-              <label><input type="checkbox" class="filter-process" value="portfolio" /> Portfolio Walkthrough</label>
-              <label><input type="checkbox" class="filter-process" value="design" /> Take-home Challenge</label>
-              <label><input type="checkbox" class="filter-process" value="recruiter" /> Recruiter Call</label>
+              <label><input type="checkbox" class="filter-process" value="email" /> <img src="/assets/images/email_questions.png" alt="Email Questions" class="filter-icon" /> Email Questions</label>
+              <label><input type="checkbox" class="filter-process" value="one-sided" /> <img src="/assets/images/one-sided_interview.png" alt="One-sided Interview" class="filter-icon" /> One-sided Interview</label>
+              <label><input type="checkbox" class="filter-process" value="behavioural" /> <img src="/assets/images/behavioural_interview.png" alt="Behavioural Interview" class="filter-icon" /> Behavioural Interview</label>
+              <label><input type="checkbox" class="filter-process" value="portfolio" /> <img src="/assets/images/portfolio_walkthrough.png" alt="Portfolio Walkthrough" class="filter-icon" /> Portfolio Walkthrough</label>
+              <label><input type="checkbox" class="filter-process" value="design" /> <img src="/assets/images/take-home_challenge.png" alt="Take-home Challenge" class="filter-icon" /> Take-home Challenge</label>
+              <label><input type="checkbox" class="filter-process" value="recruiter" /> <img src="/assets/images/recruiter_call.png" alt="Recruiter Call" class="filter-icon" /> Recruiter Call</label>
             </div>
           </fieldset>
           
           <fieldset class="filter-fieldset">
           <legend>Other Filters</legend>
-          <label><input type="checkbox" name="design" id="filterDesign" /> Design-related</label>
-          <label><input type="checkbox" name="referred" id="filterReferred" /> Referred</label>
-          <label><input type="checkbox" name="tailored" id="filterTailored" /> Tailored App</label>
-          <label><input type="checkbox" class="filter-process" id="filterPrivate" value="private" /> Private Posting</label>
+          <label><input type="checkbox" name="design" id="filterDesign" /> <img src="/assets/images/design-related.png" alt="Design Related" class="filter-icon" /> Design-related</label>
+          <label><input type="checkbox" name="referred" id="filterReferred" /> <img src="/assets/images/referred.png" alt="Referred" class="filter-icon" /> Referred</label>
+          <label><input type="checkbox" name="tailored" id="filterTailored" /> <img src="/assets/images/tailored_app.png" alt="Tailored App" class="filter-icon" /> Tailored App</label>
+          <label><input type="checkbox" class="filter-process" id="filterPrivate" value="private" /> <img src="/assets/images/private_posting.png" alt="Private Posting" class="filter-icon" /> Private Posting</label>
           </fieldset>
 
           <div class="buttons-container">

@@ -423,3 +423,59 @@ function escapeHtml(str) {
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#039;')
 }
+
+// Custom dropdown functionality
+function initCustomDropdown(buttonId, menuId, hiddenInputId) {
+    const button = document.querySelector(`#${buttonId}`)
+    const menu = document.querySelector(`#${menuId}`)
+    const hiddenInput = document.querySelector(`#${hiddenInputId}`)
+    const options = menu.querySelectorAll('.custom-option')
+    
+    if (!button || !menu || !hiddenInput) return
+    
+    // Toggle menu on button click
+    button.addEventListener('click', (e) => {
+        e.stopPropagation()
+        menu.classList.toggle('open')
+    })
+    
+    // Handle option selection
+    options.forEach(option => {
+        option.addEventListener('click', (e) => {
+            e.stopPropagation()
+            const value = option.getAttribute('data-value')
+            const text = option.textContent.trim()
+            
+            // Update hidden input value
+            hiddenInput.value = value
+            
+            // Update button text
+            button.querySelector('span').textContent = text
+            
+            // Update selected state
+            options.forEach(opt => opt.classList.remove('selected'))
+            option.classList.add('selected')
+            
+            // Close menu
+            menu.classList.remove('open')
+            
+            // Trigger form change for validation
+            const filterForm = document.querySelector('#filterForm')
+            if (filterForm) {
+                filterForm.dispatchEvent(new Event('change'))
+            }
+        })
+    })
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!button.contains(e.target) && !menu.contains(e.target)) {
+            menu.classList.remove('open')
+        }
+    })
+}
+
+// Initialize custom dropdowns
+initCustomDropdown('statusButton', 'statusMenu', 'filterStatus')
+initCustomDropdown('yearButton', 'yearMenu', 'filterYear')
+

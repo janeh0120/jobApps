@@ -265,6 +265,110 @@ p{
     flex-wrap: wrap;
 }
 
+/* Filter icons next to labels */
+.filter-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    vertical-align: middle;
+    display: inline-block;
+    margin: 0 0.25rem;
+}
+
+.filter-fieldset label {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    white-space: nowrap;
+}
+
+/* Custom select dropdown styling */
+.custom-select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.custom-select-button {
+    width: 100%;
+    padding: 0.35rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #333;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 400;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: border-color 0.2s ease;
+}
+
+.custom-select-button:hover {
+    border-color: #007bff;
+}
+
+.custom-select-button:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+.custom-select-button::after {
+    content: '▼';
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
+    color: #666;
+}
+
+.custom-select-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.custom-select-menu.open {
+    display: block;
+}
+
+.custom-option {
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.15s ease;
+    font-size: 0.9rem;
+}
+
+.custom-option:hover {
+    background-color: #f5f5f5;
+}
+
+.custom-option.selected {
+    background-color: #e8f4ff;
+    color: #007bff;
+    font-weight: 500;
+}
+
+.option-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
 /* Minimal item card */
 .item {
     /* border: 1px solid #eee; */
