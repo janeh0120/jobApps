@@ -28,10 +28,6 @@ h2{
     text-transform: uppercase;
 }
 
-p{
-    font-size: smaller;
-}
-
 /* Header row with title and button */
 .header-row {
     display: flex;
@@ -40,7 +36,7 @@ p{
     gap: 1rem;
     background-color: rgb(1, 1, 27);
     color: #fff;
-    padding-right: 1rem;
+    padding: 1rem;
     box-sizing: border-box;
     width: 100%;
 }
@@ -273,6 +269,9 @@ p{
     vertical-align: middle;
     display: inline-block;
     margin: 0 0.25rem;
+    background-color: rgb(227, 227, 227);
+    padding: 2px;
+    border-radius: 2px;
 }
 
 .filter-fieldset label {
@@ -306,13 +305,13 @@ p{
 }
 
 .custom-select-button:hover {
-    border-color: #007bff;
+    border: 1px solid #000000;
 }
 
 .custom-select-button:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+    /* outline: none; */
+    border: 1px solid #000000;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 }
 
 .custom-select-button::after {
@@ -367,6 +366,9 @@ p{
     height: 24px;
     object-fit: contain;
     flex-shrink: 0;
+    background-color: rgb(227, 227, 227);
+    padding: 2px;
+    border-radius: 2px;
 }
 
 /* Minimal item card */
@@ -479,9 +481,10 @@ p{
 }
 
 .grid-square:hover {
-    border-color: #007bff;
+    border: 0.5px solid #000000;
+    box-sizing: border-box;
     z-index: 10;
-    box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
 }
 
 /* Faded state for non-matching filter results */

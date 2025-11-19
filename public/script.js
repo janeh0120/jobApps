@@ -53,7 +53,22 @@ const renderGrid = async (params = {}) => {
     const url = '/apps?' + qs.toString()
     const response = await fetch(url)
     if (response.ok) {
-        const allData = await response.json()
+        let allData = await response.json()
+        
+        // Sort by Year Applied (ascending), then by date added (oldest first, newest last)
+        allData = allData.sort((a, b) => {
+            const yearA = a.Year !== undefined && a.Year !== null ? parseInt(a.Year) : Infinity
+            const yearB = b.Year !== undefined && b.Year !== null ? parseInt(b.Year) : Infinity
+            
+            // First sort by year
+            if (yearA !== yearB) return yearA - yearB
+            
+            // Then sort by creation date (id or createdAt) - oldest first, newest last
+            const idA = a.id || a._id || 0
+            const idB = b.id || b._id || 0
+            return String(idA).localeCompare(String(idB))
+        })
+        
         const gridContainer = document.querySelector('#gridContainer')
         gridContainer.innerHTML = ''
         
@@ -271,9 +286,10 @@ if (form) {
         }
 
     // convert checkbox booleans for schema-aligned fields
-    out.Design_Related = !!document.querySelector('#isRelated')?.checked
-    out.Referred = !!document.querySelector('#isReferred')?.checked
-    out.Tailored_App = !!document.querySelector('#isTailored')?.checked
+    out.Design_Related = !!document.querySelector('#Design_Related')?.checked
+    out.Referred = !!document.querySelector('#Referred')?.checked
+    out.Tailored_App = !!document.querySelector('#Tailored_App')?.checked
+    out.Private_Posting = !!document.querySelector('#Private_Posting')?.checked
 
     // process boolean fields
     out.Email_Questions = !!document.querySelector('#Email_Questions')?.checked

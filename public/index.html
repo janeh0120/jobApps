@@ -97,11 +97,11 @@
 
       <fieldset>
         <legend>Other Filters</legend>
-        <label for="Design_Related_">
+        <label for="Design_Related">
           <input
             type="checkbox"
-            name="isRelated"
-            id="isRelated"
+            name="Design_Related"
+            id="Design_Related"
           />
           <span>Design-Related</span>
         </label>
@@ -109,26 +109,35 @@
         <label for="Referred">
           <input
             type="checkbox"
-            name="isReferred"
-            id="isReferred"
+            name="Referred"
+            id="Referred"
           />
           <span>Referred</span>
         </label>
       
-        <label for="Tailored Application">
+        <label for="Tailored_App">
           <input
             type="checkbox"
-            name="isTailored"
-            id="isTailored"
+            name="Tailored_App"
+            id="Tailored_App"
           />
           <span>Tailored Application</span>
+        </label>
+
+        <label for="Private_Posting">
+          <input
+            type="checkbox"
+            name="Private_Posting"
+            id="Private_Posting"
+          />
+          <span>Private Posting</span>
         </label>
       </fieldset>
 
       <div class="year-status-row">
-<div class="status-section">
+        <div class="status-section">
           <legend>Status</legend>
-          <select name="status" id="status">
+          <select name="Status" id="Status">
             <option value="">Select status</option>
             <option value="No Answer/Ongoing">No Answer/Ongoing</option>
             <option value="Rejected">Rejected</option>
@@ -138,13 +147,13 @@
 
         <div class="year-section">
           <legend>Year Applied</legend>
-          <select name="yearApplication" id="yearApplication">
+          <select name="Year" id="Year">
             <option value="">Select year</option>
-            <option value="1st Year">1st Year</option>
-            <option value="2nd Year">2nd Year</option>
-            <option value="3rd Year">3rd Year</option>
-            <option value="4th Year">4th Year</option>
-            <option value="5th Year">5th Year</option>
+            <option value="1">1st Year</option>
+            <option value="2">2nd Year</option>
+            <option value="3">3rd Year</option>
+            <option value="4">4th Year</option>
+            <option value="5">5th Year</option>
           </select>
         </div>
       </div>
@@ -225,7 +234,7 @@
 
       <!-- Filters panel on the right -->
       <aside class="filters-panel">
-        <p>Filter Applications to find patterns in my data!</p>
+        <p>Use filters below to explore trends in my job search</p>
         <form id="filterForm" class="filter-form">
           <div class="filter-group">
             <label for="filterJobTitle">Job Title</label>
